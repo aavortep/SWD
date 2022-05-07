@@ -30,13 +30,32 @@
 
 ## Use-Case диаграмма
 
-![use-case](Use-Case.png)
+![use-case](./diagrams/Use-Case.png)
 
 ## ER диаграмма сущностей
 
-![er](ER.png)
+![er](./diagrams/ER.png)
 
 ## Архитектурные характеристики, важные для проекта
 
 В последствии в приложение можно также добавить возможность бронирования, например,
 студий звукозаписи и танцевальных залов. А также добавить другие города. 
+
+**Тип приложения:** Desktop  
+**Технологический стек:** Kotlin (JDBC), PostgreSQL
+
+## Верхнеуровневое разбиение на компоненты
+
+![layers](./diagrams/Components.png)
+
+## UML доступа к данным
+
+![data access](./diagrams/UML_DAL.png)
+
+## UML бизнес-логики
+
+![business logic](./diagrams/UML_BLL.png)
+
+## Сущности БД
+
+![er db](./diagrams/ER_DB.png)
