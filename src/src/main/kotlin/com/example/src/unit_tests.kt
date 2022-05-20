@@ -1,5 +1,7 @@
 package com.example.src
 
+import java.sql.Time
+
 class TestBusiness
 {
     private var acc = Account()
@@ -28,7 +30,7 @@ class TestBusiness
         reh.id = 1
         reh.musicianId = 1
         reh.roomId = 1
-        reh.time = "12:00 - 15:00"
+        reh.time = Time(12, 0, 0)
         MusicianActs().bookReh(reh)
     }
     fun cancelReh() {
@@ -62,5 +64,42 @@ class TestBusiness
     }
     fun delRoom() {
         OwnerActs().delRoom(1)
+    }
+}
+
+class TestAccess
+{
+    fun createAcc(acc: Account) {
+        MusicianActs().save(acc)
+    }
+    fun delAcc(accId: Int) {
+        MusicianActs().delete(accId)
+    }
+    fun showBases() {
+        RehBaseActs().allBases()
+    }
+    fun getBase(baseId: Int) {
+        RehBaseActs().getBase(baseId)
+    }
+    fun bookReh(reh: Rehearsal) {
+        MusicianActs().bookReh(reh)
+    }
+    fun cancelReh(rehId: Int) {
+        MusicianActs().cancelReh(rehId)
+    }
+    fun checkReh(rehId: Int) {
+        MusicianActs().checkReh(rehId)
+    }
+    fun regBase(base: RehearsalBase, room: Room) {
+        OwnerActs().saveBase(base, room)
+    }
+    fun delBase(baseId: Int) {
+        OwnerActs().delBase(baseId)
+    }
+    fun allRehs(baseId: Int) {
+        OwnerActs().allRehs(baseId)
+    }
+    fun delRoom(roomId: Int) {
+        OwnerActs().delRoom(roomId)
     }
 }

@@ -2,7 +2,7 @@ package com.example.src
 import java.sql.*
 
 interface DBAccess {
-    fun connect()
+    fun connect(): Int
 
     fun insert(acc: Account)
     fun insert(base: RehearsalBase)
@@ -36,14 +36,16 @@ class PostgresAccess : DBAccess {
 
     private var prepStat: PreparedStatement? = null
 
-    override fun connect() {
+    override fun connect(): Int {
         try {
             connection = DriverManager.getConnection(url, user, pass)
             println("Successful connection")
+            return 0
         } catch (e: Exception) {
             print(e.message)
             e.printStackTrace()
         }
+        return 1
     }
 
     override fun insert(acc: Account) {
