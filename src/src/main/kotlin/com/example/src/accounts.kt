@@ -1,5 +1,7 @@
 package com.example.src
 
+import java.util.LinkedList
+
 class Account
 {
     var id: Int = -1
@@ -39,6 +41,7 @@ open class AccActs
     }
     fun delete(accId: Int) {
         RehActs().delByAcc(accId)
+        RehBaseActs().delByAcc(accId)
         rep.deleteAcc(accId)
     }
     fun cancelReh(rehId: Int) {
@@ -51,8 +54,8 @@ class MusicianActs : AccActs()
     fun bookReh(reh: Rehearsal) {
         RehActs().book(reh)
     }
-    fun checkReh(rehId: Int) {
-        RehActs().getReh(rehId)
+    fun checkReh(rehId: Int): Rehearsal {
+        return RehActs().getReh(rehId)
     }
 }
 
@@ -64,8 +67,8 @@ class OwnerActs : AccActs()
     fun delBase(baseId: Int) {
         RehBaseActs().delete(baseId)
     }
-    fun allRehs(baseId: Int) {
-        RehActs().allRehs(baseId)
+    fun allRehs(baseId: Int): MutableList<Rehearsal> {
+        return RehActs().allRehs(baseId)
     }
 }
 

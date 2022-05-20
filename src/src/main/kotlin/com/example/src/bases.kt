@@ -29,11 +29,25 @@ class RehBaseRepository
     fun deleteBase(baseId: Int) {
         println("deleting base...")
     }
-    fun getBase(baseId: Int) {
-        println("selecting base...")
+    fun delByAcc(accId: Int) {
+        var exists: Boolean = false
+        for (b in bases)
+            if (b.ownerId == accId) {
+                exists = true
+                break
+            }
+        if (exists)
+            println("deleting bases by acc...")
+        else
+            println("no bases by this acc")
     }
-    fun getAllBases() {
+    fun getBase(baseId: Int): RehearsalBase {
+        println("selecting base...")
+        return RehearsalBase()
+    }
+    fun getAllBases(): MutableList<RehearsalBase> {
         println("selecting all bases...")
+        return bases
     }
 }
 
@@ -49,10 +63,14 @@ class RehBaseActs
         RoomActs().delByBase(baseId)
         rep.deleteBase(baseId)
     }
-    fun getBase(baseId: Int) {
-        rep.getBase(baseId)
+    fun delByAcc(accId: Int) {
+        RoomActs().delByAcc(accId)
+        rep.delByAcc(accId)
     }
-    fun allBases() {
-        rep.getAllBases()
+    fun getBase(baseId: Int): RehearsalBase {
+        return rep.getBase(baseId)
+    }
+    fun allBases(): MutableList<RehearsalBase> {
+        return rep.getAllBases()
     }
 }

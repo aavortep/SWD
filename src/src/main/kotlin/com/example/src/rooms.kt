@@ -30,7 +30,10 @@ class RoomRepository
         println("deleting room...")
     }
     fun delByBase(baseId: Int) {
-        println("deleting room by base...")
+        println("deleting rooms by base...")
+    }
+    fun delByAcc(accId: Int) {
+        println("deleting rooms by acc...")
     }
 }
 
@@ -46,5 +49,8 @@ class RoomActs
     }
     fun delByBase(baseId: Int) {
         rep.delByBase(baseId)
+    }
+    fun delByAcc(accId: Int) {
+        rep.delByAcc(accId)
     }
 }

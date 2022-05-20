@@ -19,13 +19,24 @@ class RehearsalRepository
         println("deleting rehearsal...")
     }
     fun delByAcc(accId: Int) {
-        println("deleting rehearsals by account...")
+        var exists: Boolean = false
+        for (r in rehearsals)
+            if (r.musicianId == accId) {
+                exists = true
+                break
+            }
+        if (exists)
+            println("deleting rehearsals by acc...")
+        else
+            println("no rehearsals by this acc")
     }
-    fun getRehearsal(rehId: Int) {
+    fun getRehearsal(rehId: Int): Rehearsal {
         println("selecting rehearsal...")
+        return Rehearsal()
     }
-    fun getAllRehs(baseId: Int) {
+    fun getAllRehs(baseId: Int): MutableList<Rehearsal> {
         println("selecting rehearsals by base...")
+        return rehearsals
     }
 }
 
@@ -42,10 +53,10 @@ class RehActs
     fun delByAcc(accId: Int) {
         rep.delByAcc(accId)
     }
-    fun getReh(rehId: Int) {
-        rep.getRehearsal(rehId)
+    fun getReh(rehId: Int): Rehearsal {
+        return rep.getRehearsal(rehId)
     }
-    fun allRehs(baseId: Int) {
-        rep.getAllRehs(baseId)
+    fun allRehs(baseId: Int): MutableList<Rehearsal> {
+        return rep.getAllRehs(baseId)
     }
 }
