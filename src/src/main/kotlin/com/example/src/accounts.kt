@@ -17,19 +17,36 @@ class AccRepository
 
     fun saveAcc(acc: Account) {
         var exists: Boolean = false
-        for (a in accs)
+        var ind = 0
+        for (a in accs) {
             if (a.id == acc.id) {
                 exists = true
                 break
             }
-        if (exists)
+            ++ind
+        }
+        if (exists) {
             println("updating account...")
+            accs[ind] = acc
+            PostgresAccess().update(acc)
+        }
         else {
             println("inserting account...")
+            accs.add(acc)
+            PostgresAccess().insert(acc)
         }
     }
     fun deleteAcc(accId: Int) {
         println("deleting account...")
+        var ind = 0
+        for (a in accs) {
+            if (a.id == accId) {
+                accs.removeAt(ind)
+                break
+            }
+            ++ind
+        }
+        PostgresAccess().deleteAcc(accId)
     }
 }
 

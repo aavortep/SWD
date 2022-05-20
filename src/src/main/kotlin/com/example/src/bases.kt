@@ -16,38 +16,51 @@ class RehBaseRepository
 
     fun saveBase(base: RehearsalBase) {
         var exists: Boolean = false
-        for (b in bases)
+        var ind = 0
+        for (b in bases) {
             if (b.id == base.id) {
                 exists = true
                 break
             }
-        if (exists)
+            ++ind
+        }
+        if (exists) {
             println("updating base...")
-        else
+            bases[ind] = base
+            PostgresAccess().update(base)
+        }
+        else {
             println("inserting base...")
+            bases.add(base)
+            PostgresAccess().insert(base)
+        }
     }
     fun deleteBase(baseId: Int) {
         println("deleting base...")
-    }
-    fun delByAcc(accId: Int) {
-        var exists: Boolean = false
-        for (b in bases)
-            if (b.ownerId == accId) {
-                exists = true
+        for (ind in bases.size - 1 downTo 0) {
+            if (bases[ind].id == baseId) {
+                bases.removeAt(ind)
                 break
             }
-        if (exists)
-            println("deleting bases by acc...")
-        else
-            println("no bases by this acc")
+        }
+        PostgresAccess().deleteBase(baseId)
+    }
+    fun delByAcc(accId: Int) {
+        println("deleting bases by acc...")
+        for (ind in bases.size - 1 downTo 0) {
+            if (bases[ind].ownerId == accId) {
+                bases.removeAt(ind)
+            }
+        }
+        PostgresAccess().deleteBasesByAcc(accId)
     }
     fun getBase(baseId: Int): RehearsalBase {
         println("selecting base...")
-        return RehearsalBase()
+        return PostgresAccess().selectBase(baseId)
     }
     fun getAllBases(): MutableList<RehearsalBase> {
         println("selecting all bases...")
-        return bases
+        return PostgresAccess().selectAllBases()
     }
 }
 

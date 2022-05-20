@@ -16,24 +16,62 @@ class RoomRepository
 
     fun saveRoom(room: Room) {
         var exists: Boolean = false
-        for (r in rooms)
+        var ind = 0
+        for (r in rooms) {
             if (r.id == room.id) {
                 exists = true
                 break
             }
-        if (exists)
+            ++ind
+        }
+        if (exists) {
             println("updating room...")
-        else
+            rooms[ind] = room
+            PostgresAccess().update(room)
+        }
+        else {
             println("inserting room...")
+            rooms.add(room)
+            PostgresAccess().insert(room)
+        }
     }
     fun deleteRoom(roomId: Int) {
         println("deleting room...")
+        var ind = 0
+        for (r in rooms) {
+            if (r.id == roomId) {
+                rooms.removeAt(ind)
+                break
+            }
+            ++ind
+        }
+        PostgresAccess().deleteRoom(roomId)
     }
     fun delByBase(baseId: Int) {
         println("deleting rooms by base...")
+        for (ind in rooms.size - 1 downTo 0) {
+            if (rooms[ind].baseId == baseId) {
+                rooms.removeAt(ind)
+            }
+        }
+        PostgresAccess().deleteRoomsByBase(baseId)
     }
     fun delByAcc(accId: Int) {
         println("deleting rooms by acc...")
+        val basesId = mutableListOf<Int>()
+        val bases = PostgresAccess().selectAllBases()
+        for (b in bases){
+            if (b.ownerId == accId)
+                basesId.add(b.id)
+        }
+        for (i in 0..basesId.size) {
+            for (ind in rooms.size - 1 downTo 0) {
+                if (rooms[ind].baseId == basesId[i]) {
+                    rooms.removeAt(ind)
+                }
+            }
+        }
+        PostgresAccess().deleteBasesByAcc(accId)
     }
 }
 
