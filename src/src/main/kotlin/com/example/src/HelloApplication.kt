@@ -31,8 +31,8 @@ fun test_business() {
 }
 
 fun test_access(): Int {
-    if (PostgresAccess().connect() == 1)
-        return 1
+    //if (PostgresAccess().connect() == 1)
+        //return 1
 
     val acc = Account()
     acc.id = 1

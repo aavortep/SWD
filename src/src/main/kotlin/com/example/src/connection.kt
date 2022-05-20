@@ -200,8 +200,8 @@ class PostgresAccess : DBAccess {
         val base = RehearsalBase()
         prepStat = connection?.prepareStatement("SELECT * FROM reh_base WHERE id = ?")
         prepStat?.setInt(1, baseId)
-        val res = prepStat?.executeQuery()
-        base.id = res!!.getInt("id")
+        val res = prepStat?.executeQuery() ?: return base
+        base.id = res.getInt("id")
         base.ownerId = res.getInt("ownerid")
         base.name = res.getString("name")
         base.address = res.getString("address")
@@ -222,9 +222,9 @@ class PostgresAccess : DBAccess {
         val bases = mutableListOf<RehearsalBase>()
         val base = RehearsalBase()
         prepStat = connection?.prepareStatement("SELECT * FROM reh_base")
-        val res = prepStat?.executeQuery()
         println("All bases:")
-        while (res!!.next()) {
+        val res = prepStat?.executeQuery() ?: return bases
+        while (res.next()) {
             base.id = res.getInt("id")
             base.ownerId = res.getInt("ownerid")
             base.name = res.getString("name")
@@ -246,8 +246,8 @@ class PostgresAccess : DBAccess {
         val reh = Rehearsal()
         prepStat = connection?.prepareStatement("SELECT * FROM rehearsal WHERE id = ?")
         prepStat?.setInt(1, rehId)
-        val res = prepStat?.executeQuery()
-        reh.id = res!!.getInt("id")
+        val res = prepStat?.executeQuery() ?: return reh
+        reh.id = res.getInt("id")
         reh.musicianId = res.getInt("musicianid")
         reh.roomId = res.getInt("roomid")
         reh.time = res.getTime("rehtime")
@@ -266,10 +266,9 @@ class PostgresAccess : DBAccess {
         prepStat = connection?.prepareStatement("SELECT * FROM rehearsal WHERE roomid IN" +
                                                     "(SELECT id FROM room WHERE baseid = ?)")
         prepStat?.setInt(1, baseId)
-        val res = prepStat?.executeQuery()
-        var i: Int = 0
         println("Selected rehearsals:")
-        while (res!!.next()) {
+        val res = prepStat?.executeQuery() ?: return rehs
+        while (res.next()) {
             reh.id = res.getInt("id")
             reh.musicianId = res.getInt("musicianid")
             reh.roomId = res.getInt("roomid")
@@ -282,5 +281,50 @@ class PostgresAccess : DBAccess {
                     "time: " + reh.time)
         }
         return rehs
+    }
+    fun selectAllRehs(): MutableList<Rehearsal> {
+        val rehs = mutableListOf<Rehearsal>()
+        val reh = Rehearsal()
+        prepStat = connection?.prepareStatement("SELECT * FROM rehearsal")
+        val res = prepStat?.executeQuery() ?: return rehs
+        while (res.next()) {
+            reh.id = res.getInt("id")
+            reh.musicianId = res.getInt("musicianid")
+            reh.roomId = res.getInt("roomid")
+            reh.time = res.getTime("rehtime")
+            rehs.add(reh)
+        }
+        return rehs
+    }
+    fun selectAllAccs(): MutableList<Account> {
+        val accs = mutableListOf<Account>()
+        val acc = Account()
+        prepStat = connection?.prepareStatement("SELECT * FROM account")
+        val res = prepStat?.executeQuery() ?: return accs
+        while (res.next()) {
+            acc.id = res.getInt("id")
+            acc.fio = res.getString("fio")
+            acc.phone = res.getString("phone")
+            acc.mail = res.getString("mail")
+            acc.password = res.getString("password")
+            accs.add(acc)
+        }
+        return accs
+    }
+    fun selectAllRooms(): MutableList<Room> {
+        val rooms = mutableListOf<Room>()
+        val room = Room()
+        prepStat = connection?.prepareStatement("SELECT * FROM room")
+        val res = prepStat?.executeQuery() ?: return rooms
+        while (res.next()) {
+            room.id = res.getInt("id")
+            room.baseId = res.getInt("baseid")
+            room.name = res.getString("name")
+            room.type = res.getString("type")
+            room.area = res.getInt("area")
+            room.cost = res.getInt("cost")
+            rooms.add(room)
+        }
+        return rooms
     }
 }
