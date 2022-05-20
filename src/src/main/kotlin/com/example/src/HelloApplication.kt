@@ -15,6 +15,22 @@ class HelloApplication : Application() {
     }
 }
 
+fun test_business() {
+    TestBusiness().createAcc()
+    TestBusiness().showBases()
+    TestBusiness().getBase()
+    TestBusiness().bookReh()
+    TestBusiness().checkReh()
+    TestBusiness().cancelReh()
+    TestBusiness().regBase()
+    TestBusiness().allRehs()
+    TestBusiness().delRoom()
+    TestBusiness().delBase()
+    TestBusiness().delAcc()
+}
+
 fun main() {
-    Application.launch(HelloApplication::class.java)
+    //Application.launch(HelloApplication::class.java)
+
+    test_business()
 }

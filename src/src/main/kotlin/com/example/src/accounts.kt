@@ -24,8 +24,9 @@ class AccRepository
             }
         if (exists)
             println("updating account...")
-        else
+        else {
             println("inserting account...")
+        }
     }
     fun deleteAcc(accId: Int) {
         println("deleting account...")
@@ -66,6 +67,9 @@ class OwnerActs : AccActs()
     }
     fun delBase(baseId: Int) {
         RehBaseActs().delete(baseId)
+    }
+    fun delRoom(roomId: Int) {
+        RoomActs().delete(roomId)
     }
     fun allRehs(baseId: Int): MutableList<Rehearsal> {
         return RehActs().allRehs(baseId)
