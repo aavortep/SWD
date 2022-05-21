@@ -1,5 +1,6 @@
 package com.example.src
 
+import java.sql.Connection
 import java.sql.Time
 
 class Rehearsal
@@ -10,14 +11,14 @@ class Rehearsal
     var roomId: Int = -1
 }
 
-class RehearsalRepository
+class RehearsalRepository(val connect: Connection?)
 {
-    private val rehearsals = mutableListOf<Rehearsal>()
+    private val rehearsals = PostgresAccess(connect).selectAllRehs()
 
     fun addRehearsal(reh: Rehearsal) {
         println("inserting rehearsal...")
         rehearsals.add(reh)
-        PostgresAccess().insert(reh)
+        PostgresAccess(connect).insert(reh)
     }
     fun deleteRehearsal(rehId: Int) {
         println("deleting rehearsal...")
@@ -29,7 +30,7 @@ class RehearsalRepository
             }
             ++ind
         }
-        PostgresAccess().deleteReh(rehId)
+        PostgresAccess(connect).deleteReh(rehId)
     }
     fun delByAcc(accId: Int) {
         println("deleting rehearsals by acc...")
@@ -38,21 +39,21 @@ class RehearsalRepository
                 rehearsals.removeAt(ind)
             }
         }
-        PostgresAccess().deleteRehsByAcc(accId)
+        PostgresAccess(connect).deleteRehsByAcc(accId)
     }
     fun getRehearsal(rehId: Int): Rehearsal {
         println("selecting rehearsal...")
-        return PostgresAccess().selectReh(rehId)
+        return PostgresAccess(connect).selectReh(rehId)
     }
     fun getAllRehs(baseId: Int): MutableList<Rehearsal> {
         println("selecting rehearsals by base...")
-        return PostgresAccess().selectAllRehs(baseId)
+        return PostgresAccess(connect).selectAllRehs(baseId)
     }
 }
 
-class RehActs
+class RehActs(val connect: Connection?)
 {
-    private val rep = RehearsalRepository()
+    private val rep = RehearsalRepository(connect)
 
     fun book(reh: Rehearsal) {
         rep.addRehearsal(reh)

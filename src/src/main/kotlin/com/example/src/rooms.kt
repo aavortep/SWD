@@ -1,5 +1,7 @@
 package com.example.src
 
+import java.sql.Connection
+
 class Room
 {
     var id: Int = -1
@@ -10,9 +12,9 @@ class Room
     var baseId: Int = -1
 }
 
-class RoomRepository
+class RoomRepository(val connect: Connection?)
 {
-    private val rooms = mutableListOf<Room>()
+    private val rooms = PostgresAccess(connect).selectAllRooms()
 
     fun saveRoom(room: Room) {
         var exists: Boolean = false
@@ -27,12 +29,12 @@ class RoomRepository
         if (exists) {
             println("updating room...")
             rooms[ind] = room
-            PostgresAccess().update(room)
+            PostgresAccess(connect).update(room)
         }
         else {
             println("inserting room...")
             rooms.add(room)
-            PostgresAccess().insert(room)
+            PostgresAccess(connect).insert(room)
         }
     }
     fun deleteRoom(roomId: Int) {
@@ -45,7 +47,7 @@ class RoomRepository
             }
             ++ind
         }
-        PostgresAccess().deleteRoom(roomId)
+        PostgresAccess(connect).deleteRoom(roomId)
     }
     fun delByBase(baseId: Int) {
         println("deleting rooms by base...")
@@ -54,12 +56,16 @@ class RoomRepository
                 rooms.removeAt(ind)
             }
         }
-        PostgresAccess().deleteRoomsByBase(baseId)
+        PostgresAccess(connect).deleteRoomsByBase(baseId)
     }
     fun delByAcc(accId: Int) {
         println("deleting rooms by acc...")
+        if (rooms.isEmpty()) {
+            println("no rooms by acc $accId")
+            return
+        }
         val basesId = mutableListOf<Int>()
-        val bases = PostgresAccess().selectAllBases()
+        val bases = PostgresAccess(connect).selectBases()
         for (b in bases){
             if (b.ownerId == accId)
                 basesId.add(b.id)
@@ -71,13 +77,13 @@ class RoomRepository
                 }
             }
         }
-        PostgresAccess().deleteBasesByAcc(accId)
+        PostgresAccess(connect).deleteRoomsByAcc(accId)
     }
 }
 
-class RoomActs
+class RoomActs(val connect: Connection?)
 {
-    private val rep = RoomRepository()
+    private val rep = RoomRepository(connect)
 
     fun save(room: Room) {
         rep.saveRoom(room)

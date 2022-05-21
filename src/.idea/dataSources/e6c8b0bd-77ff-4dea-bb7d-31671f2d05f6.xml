@@ -808,42 +808,42 @@ false Zulu
 13388||10|C|G
 13388||-9223372036854775808|U|G
 13388||10|U|G</Grants>
-      <IntrospectionStateNumber>1503</IntrospectionStateNumber>
+      <IntrospectionStateNumber>1511</IntrospectionStateNumber>
       <ObjectId>34679</ObjectId>
-      <Relations>sequence|table|34795|34796|1
-sequence|table|34804|34805|1
-sequence|table|34818|34819|1
-sequence|table|34832|34833|1
+      <Relations>sequence|table|34850|34851|1
+sequence|table|34859|34860|1
+sequence|table|34873|34874|1
+sequence|table|34887|34888|1
 </Relations>
       <OwnerName>postgres</OwnerName>
     </database>
-    <database id="3" parent="1" name="RK2">
-      <ObjectId>16682</ObjectId>
+    <database id="3" parent="1" name="postgres">
+      <Comment>default administrative connection database</Comment>
+      <ObjectId>13754</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
     <database id="4" parent="1" name="design">
       <ObjectId>16558</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
-    <database id="5" parent="1" name="postgres">
-      <Comment>default administrative connection database</Comment>
-      <ObjectId>13754</ObjectId>
+    <database id="5" parent="1" name="RK2">
+      <ObjectId>16682</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
     <role id="6" parent="1" name="pg_database_owner">
       <ObjectId>6171</ObjectId>
     </role>
-    <role id="7" parent="1" name="pg_execute_server_program">
-      <ObjectId>4571</ObjectId>
+    <role id="7" parent="1" name="pg_read_all_data">
+      <ObjectId>6181</ObjectId>
     </role>
-    <role id="8" parent="1" name="pg_monitor">
+    <role id="8" parent="1" name="pg_write_all_data">
+      <ObjectId>6182</ObjectId>
+    </role>
+    <role id="9" parent="1" name="pg_monitor">
       <ObjectId>3373</ObjectId>
       <RoleGrants>3374
 3375
 3377</RoleGrants>
-    </role>
-    <role id="9" parent="1" name="pg_read_all_data">
-      <ObjectId>6181</ObjectId>
     </role>
     <role id="10" parent="1" name="pg_read_all_settings">
       <ObjectId>3374</ObjectId>
@@ -851,20 +851,20 @@ sequence|table|34832|34833|1
     <role id="11" parent="1" name="pg_read_all_stats">
       <ObjectId>3375</ObjectId>
     </role>
-    <role id="12" parent="1" name="pg_read_server_files">
-      <ObjectId>4569</ObjectId>
-    </role>
-    <role id="13" parent="1" name="pg_signal_backend">
-      <ObjectId>4200</ObjectId>
-    </role>
-    <role id="14" parent="1" name="pg_stat_scan_tables">
+    <role id="12" parent="1" name="pg_stat_scan_tables">
       <ObjectId>3377</ObjectId>
     </role>
-    <role id="15" parent="1" name="pg_write_all_data">
-      <ObjectId>6182</ObjectId>
+    <role id="13" parent="1" name="pg_read_server_files">
+      <ObjectId>4569</ObjectId>
     </role>
-    <role id="16" parent="1" name="pg_write_server_files">
+    <role id="14" parent="1" name="pg_write_server_files">
       <ObjectId>4570</ObjectId>
+    </role>
+    <role id="15" parent="1" name="pg_execute_server_program">
+      <ObjectId>4571</ObjectId>
+    </role>
+    <role id="16" parent="1" name="pg_signal_backend">
+      <ObjectId>4200</ObjectId>
     </role>
     <role id="17" parent="1" name="postgres">
       <BypassRls>1</BypassRls>
@@ -4247,56 +4247,56 @@ sequence|table|34832|34833|1
     <schema id="264" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>1503</IntrospectionStateNumber>
+      <IntrospectionStateNumber>1511</IntrospectionStateNumber>
       <ObjectId>2200</ObjectId>
       <StateNumber>527</StateNumber>
       <OwnerName>postgres</OwnerName>
     </schema>
     <sequence id="265" parent="264" name="account_id_seq">
       <DataType>integer|0s</DataType>
-      <ObjectId>34795</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34850</ObjectId>
+      <StateNumber>1509</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="266" parent="264" name="reh_base_id_seq">
       <DataType>integer|0s</DataType>
-      <ObjectId>34804</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34859</ObjectId>
+      <StateNumber>1509</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="267" parent="264" name="rehearsal_id_seq">
       <DataType>integer|0s</DataType>
-      <ObjectId>34832</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34887</ObjectId>
+      <StateNumber>1509</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="268" parent="264" name="room_id_seq">
       <DataType>integer|0s</DataType>
-      <ObjectId>34818</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34873</ObjectId>
+      <StateNumber>1509</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <table id="269" parent="264" name="account">
-      <ObjectId>34796</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34851</ObjectId>
+      <StateNumber>1509</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="270" parent="264" name="reh_base">
-      <ObjectId>34805</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34860</ObjectId>
+      <StateNumber>1509</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="271" parent="264" name="rehearsal">
-      <ObjectId>34833</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34888</ObjectId>
+      <StateNumber>1509</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="272" parent="264" name="room">
-      <ObjectId>34819</ObjectId>
-      <StateNumber>1499</StateNumber>
+      <ObjectId>34874</ObjectId>
+      <StateNumber>1509</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
@@ -4305,258 +4305,256 @@ sequence|table|34832|34833|1
       <DefaultExpression>nextval(&apos;account_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="274" parent="269" name="fio">
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>25</TypeId>
     </column>
     <column id="275" parent="269" name="phone">
-      <DataType>char(11)|0s</DataType>
+      <DataType>text|0s</DataType>
       <Position>3</Position>
-      <StateNumber>1499</StateNumber>
-      <TypeId>1042</TypeId>
+      <StateNumber>1509</StateNumber>
+      <TypeId>25</TypeId>
     </column>
     <column id="276" parent="269" name="mail">
       <DataType>text|0s</DataType>
       <Position>4</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>25</TypeId>
     </column>
     <column id="277" parent="269" name="password">
       <DataType>text|0s</DataType>
       <Position>5</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>25</TypeId>
     </column>
     <index id="278" parent="269" name="account_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34802</ObjectId>
+      <ObjectId>34857</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <key id="279" parent="269" name="account_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34803</ObjectId>
+      <ObjectId>34858</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
-      <UnderlyingIndexId>34802</UnderlyingIndexId>
+      <StateNumber>1509</StateNumber>
+      <UnderlyingIndexId>34857</UnderlyingIndexId>
     </key>
     <column id="280" parent="270" name="id">
       <DataType>integer|0s</DataType>
       <DefaultExpression>nextval(&apos;reh_base_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="281" parent="270" name="ownerid">
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="282" parent="270" name="name">
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>25</TypeId>
     </column>
     <column id="283" parent="270" name="address">
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>25</TypeId>
     </column>
     <column id="284" parent="270" name="phone">
-      <DataType>char(11)|0s</DataType>
+      <DataType>text|0s</DataType>
       <Position>5</Position>
-      <StateNumber>1499</StateNumber>
-      <TypeId>1042</TypeId>
+      <StateNumber>1509</StateNumber>
+      <TypeId>25</TypeId>
     </column>
     <column id="285" parent="270" name="mail">
       <DataType>text|0s</DataType>
       <Position>6</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>25</TypeId>
     </column>
     <foreign-key id="286" parent="270" name="reh_base_ownerid_fkey">
       <ColNames>ownerid</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34813</ObjectId>
+      <ObjectId>34868</ObjectId>
       <RefColNames>id</RefColNames>
       <RefColPositions>1</RefColPositions>
       <RefKeyName>account_pkey</RefKeyName>
-      <StateNumber>1499</StateNumber>
-      <RefTableId>34796</RefTableId>
+      <StateNumber>1509</StateNumber>
+      <RefTableId>34851</RefTableId>
       <RefTableName>account</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
     <index id="287" parent="270" name="reh_base_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34811</ObjectId>
+      <ObjectId>34866</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <key id="288" parent="270" name="reh_base_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34812</ObjectId>
+      <ObjectId>34867</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
-      <UnderlyingIndexId>34811</UnderlyingIndexId>
+      <StateNumber>1509</StateNumber>
+      <UnderlyingIndexId>34866</UnderlyingIndexId>
     </key>
     <column id="289" parent="271" name="id">
       <DataType>integer|0s</DataType>
       <DefaultExpression>nextval(&apos;rehearsal_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="290" parent="271" name="musicianid">
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="291" parent="271" name="roomid">
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="292" parent="271" name="rehtime">
       <DataType>time|0s</DataType>
       <Position>4</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>1083</TypeId>
     </column>
     <foreign-key id="293" parent="271" name="rehearsal_musicianid_fkey">
       <ColNames>musicianid</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34839</ObjectId>
+      <ObjectId>34894</ObjectId>
       <RefColNames>id</RefColNames>
       <RefColPositions>1</RefColPositions>
-      <RefKeyName>account_pkey</RefKeyName>
-      <StateNumber>1499</StateNumber>
-      <RefTableId>34796</RefTableId>
+      <StateNumber>1509</StateNumber>
+      <RefTableId>34851</RefTableId>
       <RefTableName>account</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
     <foreign-key id="294" parent="271" name="rehearsal_roomid_fkey">
       <ColNames>roomid</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34844</ObjectId>
+      <ObjectId>34899</ObjectId>
       <RefColNames>id</RefColNames>
       <RefColPositions>1</RefColPositions>
-      <RefKeyName>room_pkey</RefKeyName>
-      <StateNumber>1499</StateNumber>
-      <RefTableId>34819</RefTableId>
+      <StateNumber>1509</StateNumber>
+      <RefTableId>34874</RefTableId>
       <RefTableName>room</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
     <index id="295" parent="271" name="rehearsal_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34837</ObjectId>
+      <ObjectId>34892</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <key id="296" parent="271" name="rehearsal_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34838</ObjectId>
+      <ObjectId>34893</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
-      <UnderlyingIndexId>34837</UnderlyingIndexId>
+      <StateNumber>1509</StateNumber>
+      <UnderlyingIndexId>34892</UnderlyingIndexId>
     </key>
     <column id="297" parent="272" name="id">
       <DataType>integer|0s</DataType>
       <DefaultExpression>nextval(&apos;room_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="298" parent="272" name="baseid">
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="299" parent="272" name="name">
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>25</TypeId>
     </column>
     <column id="300" parent="272" name="type">
-      <DataType>varchar(5)|0s</DataType>
+      <DataType>text|0s</DataType>
       <Position>4</Position>
-      <StateNumber>1499</StateNumber>
-      <TypeId>1043</TypeId>
+      <StateNumber>1509</StateNumber>
+      <TypeId>25</TypeId>
     </column>
     <column id="301" parent="272" name="area">
       <DataType>integer|0s</DataType>
       <Position>5</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="302" parent="272" name="cost">
       <DataType>integer|0s</DataType>
       <Position>6</Position>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <foreign-key id="303" parent="272" name="room_baseid_fkey">
       <ColNames>baseid</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34827</ObjectId>
+      <ObjectId>34882</ObjectId>
       <RefColNames>id</RefColNames>
       <RefColPositions>1</RefColPositions>
       <RefKeyName>reh_base_pkey</RefKeyName>
-      <StateNumber>1499</StateNumber>
-      <RefTableId>34805</RefTableId>
+      <StateNumber>1509</StateNumber>
+      <RefTableId>34860</RefTableId>
       <RefTableName>reh_base</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
     <index id="304" parent="272" name="room_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34825</ObjectId>
+      <ObjectId>34880</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
+      <StateNumber>1509</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <key id="305" parent="272" name="room_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>34826</ObjectId>
+      <ObjectId>34881</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1499</StateNumber>
-      <UnderlyingIndexId>34825</UnderlyingIndexId>
+      <StateNumber>1509</StateNumber>
+      <UnderlyingIndexId>34880</UnderlyingIndexId>
     </key>
   </database-model>
 </dataSource>

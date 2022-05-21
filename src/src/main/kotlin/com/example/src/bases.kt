@@ -1,5 +1,7 @@
 package com.example.src
 
+import java.sql.Connection
+
 class RehearsalBase
 {
     var id: Int = -1
@@ -10,9 +12,9 @@ class RehearsalBase
     var ownerId: Int = -1
 }
 
-class RehBaseRepository
+class RehBaseRepository(val connect: Connection?)
 {
-    private val bases = mutableListOf<RehearsalBase>()
+    private val bases = PostgresAccess(connect).selectBases()
 
     fun saveBase(base: RehearsalBase) {
         var exists: Boolean = false
@@ -27,12 +29,12 @@ class RehBaseRepository
         if (exists) {
             println("updating base...")
             bases[ind] = base
-            PostgresAccess().update(base)
+            PostgresAccess(connect).update(base)
         }
         else {
             println("inserting base...")
             bases.add(base)
-            PostgresAccess().insert(base)
+            PostgresAccess(connect).insert(base)
         }
     }
     fun deleteBase(baseId: Int) {
@@ -43,7 +45,7 @@ class RehBaseRepository
                 break
             }
         }
-        PostgresAccess().deleteBase(baseId)
+        PostgresAccess(connect).deleteBase(baseId)
     }
     fun delByAcc(accId: Int) {
         println("deleting bases by acc...")
@@ -52,32 +54,32 @@ class RehBaseRepository
                 bases.removeAt(ind)
             }
         }
-        PostgresAccess().deleteBasesByAcc(accId)
+        PostgresAccess(connect).deleteBasesByAcc(accId)
     }
     fun getBase(baseId: Int): RehearsalBase {
         println("selecting base...")
-        return PostgresAccess().selectBase(baseId)
+        return PostgresAccess(connect).selectBase(baseId)
     }
     fun getAllBases(): MutableList<RehearsalBase> {
         println("selecting all bases...")
-        return PostgresAccess().selectAllBases()
+        return PostgresAccess(connect).selectAllBases()
     }
 }
 
-class RehBaseActs
+class RehBaseActs(val connect: Connection?)
 {
-    private val rep = RehBaseRepository()
+    private val rep = RehBaseRepository(connect)
 
     fun save(base: RehearsalBase, room: Room) {
-        RoomActs().save(room)
         rep.saveBase(base)
+        RoomActs(connect).save(room)
     }
     fun delete(baseId: Int) {
-        RoomActs().delByBase(baseId)
+        RoomActs(connect).delByBase(baseId)
         rep.deleteBase(baseId)
     }
     fun delByAcc(accId: Int) {
-        RoomActs().delByAcc(accId)
+        RoomActs(connect).delByAcc(accId)
         rep.delByAcc(accId)
     }
     fun getBase(baseId: Int): RehearsalBase {
