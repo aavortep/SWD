@@ -1,48 +1,59 @@
 package com.example.src
 
+import java.sql.Connection
+import java.sql.Time
+
 class Rehearsal
 {
     var id: Int = -1
     var musicianId: Int = -1
-    var time: String? = null
+    var time: Time? = null
     var roomId: Int = -1
 }
 
-class RehearsalRepository
+class RehearsalRepository(val connect: Connection?)
 {
-    private val rehearsals = mutableListOf<Rehearsal>()
+    private val rehearsals = PostgresAccess(connect).selectAllRehs()
 
     fun addRehearsal(reh: Rehearsal) {
         println("inserting rehearsal...")
+        rehearsals.add(reh)
+        PostgresAccess(connect).insert(reh)
     }
     fun deleteRehearsal(rehId: Int) {
         println("deleting rehearsal...")
-    }
-    fun delByAcc(accId: Int) {
-        var exists: Boolean = false
-        for (r in rehearsals)
-            if (r.musicianId == accId) {
-                exists = true
+        var ind = 0
+        for (r in rehearsals) {
+            if (r.id == rehId) {
+                rehearsals.removeAt(ind)
                 break
             }
-        if (exists)
-            println("deleting rehearsals by acc...")
-        else
-            println("no rehearsals by this acc")
+            ++ind
+        }
+        PostgresAccess(connect).deleteReh(rehId)
+    }
+    fun delByAcc(accId: Int) {
+        println("deleting rehearsals by acc...")
+        for (ind in rehearsals.size - 1 downTo 0) {
+            if (rehearsals[ind].musicianId == accId) {
+                rehearsals.removeAt(ind)
+            }
+        }
+        PostgresAccess(connect).deleteRehsByAcc(accId)
     }
     fun getRehearsal(rehId: Int): Rehearsal {
         println("selecting rehearsal...")
-        return Rehearsal()
+        return PostgresAccess(connect).selectReh(rehId)
     }
     fun getAllRehs(baseId: Int): MutableList<Rehearsal> {
         println("selecting rehearsals by base...")
-        return rehearsals
+        return PostgresAccess(connect).selectAllRehs(baseId)
     }
 }
 
-class RehActs
+class RehActs(val connect: Connection?)
 {
-    private val rep = RehearsalRepository()
+    private val rep = RehearsalRepository(connect)
 
     fun book(reh: Rehearsal) {
         rep.addRehearsal(reh)

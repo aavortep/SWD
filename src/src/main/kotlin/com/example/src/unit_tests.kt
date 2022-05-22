@@ -1,6 +1,9 @@
 package com.example.src
 
-class TestBusiness
+import java.sql.Connection
+import java.sql.Time
+
+class TestBusiness(val connect: Connection?)
 {
     private var acc = Account()
     private var base = RehearsalBase()
@@ -13,29 +16,29 @@ class TestBusiness
         acc.phone = "89169885354"
         acc.mail = "nura.alexevna@yandex.ru"
         acc.password = "LinkinPark20"
-        MusicianActs().save(acc)
+        MusicianActs(connect).save(acc)
     }
     fun delAcc() {
-        MusicianActs().delete(1)
+        MusicianActs(connect).delete(1)
     }
     fun showBases() {
-        RehBaseActs().allBases()
+        RehBaseActs(connect).allBases()
     }
     fun getBase() {
-        RehBaseActs().getBase(3)
+        RehBaseActs(connect).getBase(3)
     }
     fun bookReh() {
         reh.id = 1
         reh.musicianId = 1
         reh.roomId = 1
-        reh.time = "12:00 - 15:00"
-        MusicianActs().bookReh(reh)
+        reh.time = Time(12, 0, 0)
+        MusicianActs(connect).bookReh(reh)
     }
     fun cancelReh() {
-        MusicianActs().cancelReh(1)
+        MusicianActs(connect).cancelReh(1)
     }
     fun checkReh() {
-        MusicianActs().checkReh(1)
+        MusicianActs(connect).checkReh(1)
     }
     fun regBase() {
         base.id = 1
@@ -52,15 +55,52 @@ class TestBusiness
         room.type = "band"
         room.baseId = 1
 
-        OwnerActs().saveBase(base, room)
+        OwnerActs(connect).saveBase(base, room)
     }
     fun delBase() {
-        OwnerActs().delBase(1)
+        OwnerActs(connect).delBase(1)
     }
     fun allRehs() {
-        OwnerActs().allRehs(1)
+        OwnerActs(connect).allRehs(1)
     }
     fun delRoom() {
-        OwnerActs().delRoom(1)
+        OwnerActs(connect).delRoom(1)
+    }
+}
+
+class TestAccess(var connect: Connection?)
+{
+    fun createAcc(acc: Account) {
+        MusicianActs(connect).save(acc)
+    }
+    fun delAcc(accId: Int) {
+        MusicianActs(connect).delete(accId)
+    }
+    fun showBases() {
+        RehBaseActs(connect).allBases()
+    }
+    fun getBase(baseId: Int) {
+        RehBaseActs(connect).getBase(baseId)
+    }
+    fun bookReh(reh: Rehearsal) {
+        MusicianActs(connect).bookReh(reh)
+    }
+    fun cancelReh(rehId: Int) {
+        MusicianActs(connect).cancelReh(rehId)
+    }
+    fun checkReh(rehId: Int) {
+        MusicianActs(connect).checkReh(rehId)
+    }
+    fun regBase(base: RehearsalBase, room: Room) {
+        OwnerActs(connect).saveBase(base, room)
+    }
+    fun delBase(baseId: Int) {
+        OwnerActs(connect).delBase(baseId)
+    }
+    fun allRehs(baseId: Int) {
+        OwnerActs(connect).allRehs(baseId)
+    }
+    fun delRoom(roomId: Int) {
+        OwnerActs(connect).delRoom(roomId)
     }
 }
