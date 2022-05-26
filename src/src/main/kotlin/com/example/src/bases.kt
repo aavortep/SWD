@@ -17,6 +17,8 @@ class RehBaseRepository(val connect: Connection?)
     private val bases = PostgresAccess(connect).selectBases()
 
     fun saveBase(base: RehearsalBase) {
+        if (base.id == -1)
+            base.id = bases.size + 1
         var exists: Boolean = false
         var ind = 0
         for (b in bases) {
@@ -27,18 +29,18 @@ class RehBaseRepository(val connect: Connection?)
             ++ind
         }
         if (exists) {
-            println("updating base...")
+            //println("updating base...")
             bases[ind] = base
             PostgresAccess(connect).update(base)
         }
         else {
-            println("inserting base...")
+            //println("inserting base...")
             bases.add(base)
             PostgresAccess(connect).insert(base)
         }
     }
     fun deleteBase(baseId: Int) {
-        println("deleting base...")
+        //println("deleting base...")
         for (ind in bases.size - 1 downTo 0) {
             if (bases[ind].id == baseId) {
                 bases.removeAt(ind)
@@ -48,7 +50,7 @@ class RehBaseRepository(val connect: Connection?)
         PostgresAccess(connect).deleteBase(baseId)
     }
     fun delByAcc(accId: Int) {
-        println("deleting bases by acc...")
+        //println("deleting bases by acc...")
         for (ind in bases.size - 1 downTo 0) {
             if (bases[ind].ownerId == accId) {
                 bases.removeAt(ind)
@@ -57,12 +59,15 @@ class RehBaseRepository(val connect: Connection?)
         PostgresAccess(connect).deleteBasesByAcc(accId)
     }
     fun getBase(baseId: Int): RehearsalBase {
-        println("selecting base...")
+        //println("selecting base...")
         return PostgresAccess(connect).selectBase(baseId)
     }
     fun getAllBases(): MutableList<RehearsalBase> {
-        println("selecting all bases...")
+        //println("selecting all bases...")
         return PostgresAccess(connect).selectAllBases()
+    }
+    fun getBasesByAcc(accId: Int): MutableList<RehearsalBase> {
+        return PostgresAccess(connect).selectBasesByAcc(accId)
     }
 }
 
@@ -72,6 +77,7 @@ class RehBaseActs(val connect: Connection?)
 
     fun save(base: RehearsalBase, room: Room) {
         rep.saveBase(base)
+        room.baseId = base.id
         RoomActs(connect).save(room)
     }
     fun delete(baseId: Int) {
@@ -87,5 +93,8 @@ class RehBaseActs(val connect: Connection?)
     }
     fun allBases(): MutableList<RehearsalBase> {
         return rep.getAllBases()
+    }
+    fun basesByAcc(accId: Int): MutableList<RehearsalBase> {
+        return rep.getBasesByAcc(accId)
     }
 }

@@ -27,18 +27,18 @@ class RoomRepository(val connect: Connection?)
             ++ind
         }
         if (exists) {
-            println("updating room...")
+            //println("updating room...")
             rooms[ind] = room
             PostgresAccess(connect).update(room)
         }
         else {
-            println("inserting room...")
+            //println("inserting room...")
             rooms.add(room)
             PostgresAccess(connect).insert(room)
         }
     }
     fun deleteRoom(roomId: Int) {
-        println("deleting room...")
+        //println("deleting room...")
         var ind = 0
         for (r in rooms) {
             if (r.id == roomId) {
@@ -50,7 +50,7 @@ class RoomRepository(val connect: Connection?)
         PostgresAccess(connect).deleteRoom(roomId)
     }
     fun delByBase(baseId: Int) {
-        println("deleting rooms by base...")
+        //println("deleting rooms by base...")
         for (ind in rooms.size - 1 downTo 0) {
             if (rooms[ind].baseId == baseId) {
                 rooms.removeAt(ind)
@@ -59,9 +59,9 @@ class RoomRepository(val connect: Connection?)
         PostgresAccess(connect).deleteRoomsByBase(baseId)
     }
     fun delByAcc(accId: Int) {
-        println("deleting rooms by acc...")
+        //println("deleting rooms by acc...")
         if (rooms.isEmpty()) {
-            println("no rooms by acc $accId")
+            //println("no rooms by acc $accId")
             return
         }
         val basesId = mutableListOf<Int>()
