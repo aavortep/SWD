@@ -3,8 +3,50 @@ package com.example.src
 import java.sql.Connection
 import java.sql.Time
 
+class Presenter()
+{
+    private fun is_empty(str: String?): Boolean {
+        return (str == null || str == "\n" || str == "")
+    }
+    fun read_int(): Int {
+        var option: Int?
+        try {
+            option = readLine()?.toInt()
+        }
+        catch (e: NumberFormatException) {
+            println("Invalid option")
+            option = -1
+        }
+        if (option == null) {
+            println("Invalid input")
+            option = -1
+        }
+        return option
+    }
+    fun read_str(): String? {
+        var tmp = readLine()
+        if (is_empty(tmp)) {
+            println("Invalid input")
+            tmp = null
+        }
+        return tmp
+    }
+    fun conv_int(str: String): Int? {
+        var num: Int?
+        try {
+            num = str.toInt()
+        }
+        catch (e: NumberFormatException) {
+            println("Invalid input")
+            num = null
+        }
+        return num
+    }
+}
+
 class TUI(val connect: Connection?)
 {
+    private val pres = Presenter()
     private var option: Int? = -1
     private val welcome_menu = "0. Exit\n 1. Sign in\n 2. Sign up"
     private val musician_menu = "0. Exit\n 3. Book rehearsal\n" +
@@ -13,46 +55,23 @@ class TUI(val connect: Connection?)
     private val owner_menu = "0. Exit\n 10. All rehearsals\n 11. Register base\n" +
             "12. Base settings\n 13. Delete base\n 14. To musician mode"
 
-    private fun check_input(tmp: String?): Boolean {
-        return (tmp == null || tmp == "\n" || tmp == "")
-    }
     fun welcome() {
         println("Welcome to HearBase!\n")
         while (option != 0) {
             println(welcome_menu)
             print("> ")
-            try {
-                option = readLine()?.toInt()
-            }
-            catch (e: NumberFormatException) {
-                println("Invalid option")
-                option = -1
-                continue
-            }
-            if (option == null) {
-                option = -1
-                println("Invalid input")
-                continue
-            }
+            option = pres.read_int()
 
             when (option) {
                 0 -> break
                 1 -> {
                     println("LOGGING IN\n")
                     print("Mail: ")
-                    var tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    val mail: String = tmp.toString()
+                    var tmp = pres.read_str() ?: continue
+                    val mail: String = tmp
                     print("Password: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    val password: String = tmp.toString()
+                    tmp = pres.read_str() ?: continue
+                    val password: String = tmp
 
                     val acc = AccActs(connect).findAcc(mail, password)
                     if (acc.id == -1) {
@@ -66,32 +85,16 @@ class TUI(val connect: Connection?)
                     println("CREATING NEW ACCOUNT\n")
                     val acc = Account()
                     print("FIO: ")
-                    var tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    var tmp = pres.read_str() ?: continue
                     acc.fio = tmp
                     print("Phone: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     acc.phone = tmp
                     print("Mail: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     acc.mail = tmp
                     print("Password: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     acc.password = tmp
 
                     acc.id = AccActs(connect).save(acc)
@@ -106,19 +109,7 @@ class TUI(val connect: Connection?)
         while (option != 0) {
             println(musician_menu)
             print("> ")
-            try {
-                option = readLine()?.toInt()
-            }
-            catch (e: NumberFormatException) {
-                println("Invalid option")
-                option = -1
-                continue
-            }
-            if (option == null) {
-                option = -1
-                println("Invalid input")
-                continue
-            }
+            option = pres.read_int()
 
             when (option) {
                 0 -> break
@@ -130,31 +121,12 @@ class TUI(val connect: Connection?)
                         println("${rooms[i].id}. ${rooms[i].name} (${rooms[i].type})")
                     }
                     print("Input ID of the room, you want to book: ")
-                    var tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    try {
-                        reh.roomId = tmp!!.toInt()
-                    }
-                    catch (e: NumberFormatException) {
-                        println("Invalid input")
-                        continue
-                    }
+                    var tmp = pres.read_str() ?: continue
+                    reh.roomId = pres.conv_int(tmp) ?: continue
                     print("Rehearsal hour: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    try {
-                        reh.time = Time(tmp!!.toInt(), 0, 0)
-                    }
-                    catch (e: NumberFormatException) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
+                    val hour = pres.conv_int(tmp) ?: continue
+                    reh.time = Time(hour, 0, 0)
                     reh.musicianId = acc.id
 
                     MusicianActs(connect).bookReh(reh)
@@ -178,18 +150,8 @@ class TUI(val connect: Connection?)
                                 "${rehs[i].time}")
                     }
                     print("Choose rehearsal, you want to cancel: ")
-                    val tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    try {
-                        rehId = tmp!!.toInt()
-                    }
-                    catch (e: NumberFormatException) {
-                        println("Invalid input")
-                        continue
-                    }
+                    val tmp = pres.read_str() ?: continue
+                    rehId = pres.conv_int(tmp) ?: continue
 
                     MusicianActs(connect).cancelReh(rehId)
                     println("REHEARSAL CANCELED SUCCESSFULLY")
@@ -205,25 +167,13 @@ class TUI(val connect: Connection?)
                     if (readLine() == "n")
                         continue
                     print("New phone: ")
-                    var tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    var tmp = pres.read_str() ?: continue
                     cur_acc.phone = tmp
                     print("New mail: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     cur_acc.mail = tmp
                     print("New password: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     cur_acc.password = tmp
 
                     AccActs(connect).save(cur_acc)
@@ -235,6 +185,7 @@ class TUI(val connect: Connection?)
                     welcome()
                 }
                 9 -> welcome()
+                else -> println("Invalid option")
             }
         }
 
@@ -244,19 +195,7 @@ class TUI(val connect: Connection?)
         while (option != 0) {
             println(owner_menu)
             print("> ")
-            try {
-                option = readLine()?.toInt()
-            }
-            catch (e: NumberFormatException) {
-                println("Invalid option")
-                option = -1
-                continue
-            }
-            if (option == null) {
-                option = -1
-                println("Invalid input")
-                continue
-            }
+            option = pres.read_int()
 
             when (option) {
                 0 -> break
@@ -268,18 +207,8 @@ class TUI(val connect: Connection?)
                         println("${bases[i].id}. ${bases[i].name}")
                     }
                     print("Choose base: ")
-                    val tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    try {
-                        baseId = tmp!!.toInt()
-                    }
-                    catch (e: NumberFormatException) {
-                        println("Invalid input")
-                        continue
-                    }
+                    val tmp = pres.read_str() ?: continue
+                    baseId = pres.conv_int(tmp) ?: continue
 
                     val rehs = OwnerActs(connect).allRehs(baseId)
                     val rooms = PostgresAccess(connect).selectAllRooms()
@@ -294,80 +223,37 @@ class TUI(val connect: Connection?)
                     println("ADDING NEW BASE")
                     val base = RehearsalBase()
                     print("Name: ")
-                    var tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    var tmp = pres.read_str() ?: continue
                     base.name = tmp
                     print("Address: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     base.address = tmp
                     print("Phone: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     base.phone = tmp
                     print("Mail: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     base.mail = tmp
                     base.ownerId = acc.id
 
-                    var cnt: Int
                     print("How many rooms? ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    try {
-                        cnt = tmp!!.toInt()
-                    }
-                    catch (e: NumberFormatException) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
+                    val cnt: Int = pres.conv_int(tmp) ?: continue
                     for (i in 1..cnt) {
                         println("ADDING ROOM $i")
                         val room = Room()
                         print("Name: ")
-                        tmp = readLine()
-                        if (check_input(tmp)) {
-                            println("Invalid input")
-                            continue
-                        }
+                        tmp = pres.read_str() ?: continue
                         room.name = tmp
                         print("Type: ")
-                        tmp = readLine()
-                        if (check_input(tmp)) {
-                            println("Invalid input")
-                            continue
-                        }
+                        tmp = pres.read_str() ?: continue
                         room.type = tmp
                         print("Area: ")
-                        tmp = readLine()
-                        if (check_input(tmp)) {
-                            println("Invalid input")
-                            continue
-                        }
-                        room.area = tmp!!.toInt()
+                        tmp = pres.read_str() ?: continue
+                        room.area = pres.conv_int(tmp) ?: continue
                         print("Cost: ")
-                        tmp = readLine()
-                        if (check_input(tmp)) {
-                            println("Invalid input")
-                            continue
-                        }
-                        room.cost = tmp!!.toInt()
+                        tmp = pres.read_str() ?: continue
+                        room.cost = pres.conv_int(tmp) ?: continue
 
                         OwnerActs(connect).saveBase(base, room)
                     }
@@ -384,18 +270,8 @@ class TUI(val connect: Connection?)
                         println("${bases[i].id}. ${bases[i].name}")
                     }
                     print("Choose base: ")
-                    var tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    try {
-                        baseId = tmp!!.toInt()
-                    }
-                    catch (e: NumberFormatException) {
-                        println("Invalid input")
-                        continue
-                    }
+                    var tmp = pres.read_str() ?: continue
+                    baseId = pres.conv_int(tmp) ?: continue
 
                     println("GOING TO BASE $baseId SETTINGS")
                     val base = RehBaseActs(connect).getBase(baseId)
@@ -406,32 +282,16 @@ class TUI(val connect: Connection?)
                     if (readLine() == "n")
                         continue
                     print("New name: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     base.name = tmp
                     print("New address: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     base.address = tmp
                     print("New phone: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     base.phone = tmp
                     print("New mail: ")
-                    tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
+                    tmp = pres.read_str() ?: continue
                     base.mail = tmp
 
                     OwnerActs(connect).saveBase(base, room)
@@ -445,23 +305,14 @@ class TUI(val connect: Connection?)
                         println("${bases[i].id}. ${bases[i].name}")
                     }
                     print("Choose base, you want to delete: ")
-                    val tmp = readLine()
-                    if (check_input(tmp)) {
-                        println("Invalid input")
-                        continue
-                    }
-                    try {
-                        baseId = tmp!!.toInt()
-                    }
-                    catch (e: NumberFormatException) {
-                        println("Invalid input")
-                        continue
-                    }
+                    val tmp = pres.read_str() ?: continue
+                    baseId = pres.conv_int(tmp) ?: continue
 
                     OwnerActs(connect).delBase(baseId)
                     println("BASE $baseId DELETED SUCCESSFULLY")
                 }
                 14 -> option = musician(acc)
+                else -> println("Invalid option")
             }
         }
 
