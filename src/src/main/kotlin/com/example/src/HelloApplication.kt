@@ -10,8 +10,28 @@ import java.sql.Time
 class HelloApplication : Application() {
     override fun start(stage: Stage) {
         val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("hello-view.fxml"))
-        val scene = Scene(fxmlLoader.load(), 320.0, 240.0)
-        stage.title = "Hello!"
+        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
+        stage.title = "Welcome"
+        stage.scene = scene
+        stage.show()
+    }
+}
+
+class SignIn
+{
+    fun sign_in() {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("sign-in.fxml"))
+        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
+        val stage = Stage()
+        stage.title = "Sign in"
+        stage.scene = scene
+        stage.show()
+    }
+    fun sign_up() {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("sign-up.fxml"))
+        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
+        val stage = Stage()
+        stage.title = "Sign up"
         stage.scene = scene
         stage.show()
     }
@@ -91,9 +111,21 @@ fun test_access(connect: Connection?) {
     TestAccess(connect).delAcc(2)
 }
 
-fun main() {
-    //Application.launch(HelloApplication::class.java)
+class Actions
+{
+    private val connect = PostgresAccess(null).connect()
 
-    val connect = PostgresAccess(null).connect()
-    TUI(connect).welcome()
+    fun findAcc(mail: String, password: String): Account {
+        return AccActs(connect).findAcc(mail, password)
+    }
+    fun saveAcc(acc: Account) {
+        AccActs(connect).save(acc)
+    }
+}
+
+fun main() {
+    //val connect = PostgresAccess(null).connect()
+    Application.launch(HelloApplication::class.java)
+
+    //TUI(connect).welcome()
 }

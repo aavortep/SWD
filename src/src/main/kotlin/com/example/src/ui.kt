@@ -3,7 +3,7 @@ package com.example.src
 import java.sql.Connection
 import java.sql.Time
 
-class Presenter()
+class CheckData()
 {
     private fun is_empty(str: String?): Boolean {
         return (str == null || str == "\n" || str == "")
@@ -46,7 +46,7 @@ class Presenter()
 
 class TUI(val connect: Connection?)
 {
-    private val pres = Presenter()
+    private val pres = CheckData()
     private var option: Int? = -1
     private val welcome_menu = "0. Exit\n 1. Sign in\n 2. Sign up"
     private val musician_menu = "0. Exit\n 3. Book rehearsal\n" +
