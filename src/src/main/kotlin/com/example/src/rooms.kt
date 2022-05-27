@@ -17,6 +17,8 @@ class RoomRepository(val connect: Connection?)
     private val rooms = PostgresAccess(connect).selectAllRooms()
 
     fun saveRoom(room: Room) {
+        if (room.id == -1)
+            room.id = rooms.size + 1
         var exists: Boolean = false
         var ind = 0
         for (r in rooms) {

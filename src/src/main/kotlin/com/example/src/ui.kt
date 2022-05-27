@@ -171,7 +171,7 @@ class TUI(val connect: Connection?)
                 5 -> {
                     val rehs = RehActs(connect).rehsByAcc(acc.id)
                     val rooms = PostgresAccess(connect).selectAllRooms()
-                    var rehId: Int = -1
+                    var rehId: Int
                     println("YOUR BOOKED REHEARSALS:")
                     for (i in 0 until rehs.size) {
                         println("${rehs[i].id}. ${rooms[rehs[i].roomId-1].name} - " +
@@ -198,7 +198,7 @@ class TUI(val connect: Connection?)
                 7 -> {
                     val accs = PostgresAccess(connect).selectAllAccs()
                     println("GOING TO ACC SETTINGS")
-                    val cur_acc = accs[acc.id]
+                    val cur_acc = accs[acc.id - 1]
                     println("Current state: ${cur_acc.fio} ${cur_acc.mail} " +
                             "${cur_acc.phone} ${cur_acc.password}")
                     print("Want to change? (Y/n) ")
@@ -232,9 +232,9 @@ class TUI(val connect: Connection?)
                 8 -> {
                     AccActs(connect).delete(acc.id)
                     println("ACC DELETED SUCCESSFULLY")
-                    option = 0
+                    welcome()
                 }
-                9 -> break
+                9 -> welcome()
             }
         }
 
@@ -262,7 +262,7 @@ class TUI(val connect: Connection?)
                 0 -> break
                 10 -> {
                     val bases = RehBaseActs(connect).basesByAcc(acc.id)
-                    var baseId: Int = -1
+                    var baseId: Int
                     println("YOUR BASES:")
                     for (i in 0 until bases.size) {
                         println("${bases[i].id}. ${bases[i].name}")
@@ -341,7 +341,7 @@ class TUI(val connect: Connection?)
                         println("ADDING ROOM $i")
                         val room = Room()
                         print("Name: ")
-                        var tmp = readLine()
+                        tmp = readLine()
                         if (check_input(tmp)) {
                             println("Invalid input")
                             continue
@@ -374,12 +374,97 @@ class TUI(val connect: Connection?)
 
                     println("BASE REGISTERED SUCCESSFULLY")
                 }
-                12 -> TODO()
-                13 -> TODO()
+                12 -> {
+                    println("BASES SETTINGS")
+
+                    val bases = RehBaseActs(connect).basesByAcc(acc.id)
+                    var baseId: Int
+                    println("YOUR BASES:")
+                    for (i in 0 until bases.size) {
+                        println("${bases[i].id}. ${bases[i].name}")
+                    }
+                    print("Choose base: ")
+                    var tmp = readLine()
+                    if (check_input(tmp)) {
+                        println("Invalid input")
+                        continue
+                    }
+                    try {
+                        baseId = tmp!!.toInt()
+                    }
+                    catch (e: NumberFormatException) {
+                        println("Invalid input")
+                        continue
+                    }
+
+                    println("GOING TO BASE $baseId SETTINGS")
+                    val base = RehBaseActs(connect).getBase(baseId)
+                    val room = Room()
+                    println("Current state: ${base.name} ${base.address} " +
+                            "${base.phone} ${base.mail}")
+                    print("Want to change? (Y/n) ")
+                    if (readLine() == "n")
+                        continue
+                    print("New name: ")
+                    tmp = readLine()
+                    if (check_input(tmp)) {
+                        println("Invalid input")
+                        continue
+                    }
+                    base.name = tmp
+                    print("New address: ")
+                    tmp = readLine()
+                    if (check_input(tmp)) {
+                        println("Invalid input")
+                        continue
+                    }
+                    base.address = tmp
+                    print("New phone: ")
+                    tmp = readLine()
+                    if (check_input(tmp)) {
+                        println("Invalid input")
+                        continue
+                    }
+                    base.phone = tmp
+                    print("New mail: ")
+                    tmp = readLine()
+                    if (check_input(tmp)) {
+                        println("Invalid input")
+                        continue
+                    }
+                    base.mail = tmp
+
+                    OwnerActs(connect).saveBase(base, room)
+                    println("BASE CHANGED SUCCESSFULLY")
+                }
+                13 -> {
+                    val bases = RehBaseActs(connect).basesByAcc(acc.id)
+                    var baseId: Int
+                    println("YOUR BASES:")
+                    for (i in 0 until bases.size) {
+                        println("${bases[i].id}. ${bases[i].name}")
+                    }
+                    print("Choose base, you want to delete: ")
+                    val tmp = readLine()
+                    if (check_input(tmp)) {
+                        println("Invalid input")
+                        continue
+                    }
+                    try {
+                        baseId = tmp!!.toInt()
+                    }
+                    catch (e: NumberFormatException) {
+                        println("Invalid input")
+                        continue
+                    }
+
+                    OwnerActs(connect).delBase(baseId)
+                    println("BASE $baseId DELETED SUCCESSFULLY")
+                }
                 14 -> option = musician(acc)
             }
         }
-        
+
         return option
     }
 }

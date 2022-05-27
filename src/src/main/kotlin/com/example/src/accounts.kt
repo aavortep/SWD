@@ -38,13 +38,13 @@ class AccRepository(val connect: Connection?)
         else {
             //println("inserting account...")
             accs.add(acc)
-            for (a in accs) {
+            /*for (a in accs) {
                 println(a.id)
                 println(a.fio)
                 println(a.phone)
                 println(a.mail)
                 println(a.password)
-            }
+            }*/
             PostgresAccess(connect).insert(acc)
         }
     }

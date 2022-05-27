@@ -95,5 +95,5 @@ fun main() {
     //Application.launch(HelloApplication::class.java)
 
     val connect = PostgresAccess(null).connect()
-    test_access(connect)
+    TUI(connect).welcome()
 }

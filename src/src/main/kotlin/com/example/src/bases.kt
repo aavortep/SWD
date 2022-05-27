@@ -77,8 +77,11 @@ class RehBaseActs(val connect: Connection?)
 
     fun save(base: RehearsalBase, room: Room) {
         rep.saveBase(base)
-        room.baseId = base.id
-        RoomActs(connect).save(room)
+        if (room.name != null)
+        {
+            room.baseId = base.id
+            RoomActs(connect).save(room)
+        }
     }
     fun delete(baseId: Int) {
         RoomActs(connect).delByBase(baseId)
