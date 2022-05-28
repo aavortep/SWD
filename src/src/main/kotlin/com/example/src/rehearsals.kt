@@ -16,12 +16,14 @@ class RehearsalRepository(val connect: Connection?)
     private val rehearsals = PostgresAccess(connect).selectAllRehs()
 
     fun addRehearsal(reh: Rehearsal) {
-        println("inserting rehearsal...")
+        //println("inserting rehearsal...")
+        if (reh.id == -1)
+            reh.id = rehearsals.size + 1
         rehearsals.add(reh)
         PostgresAccess(connect).insert(reh)
     }
     fun deleteRehearsal(rehId: Int) {
-        println("deleting rehearsal...")
+        //println("deleting rehearsal...")
         var ind = 0
         for (r in rehearsals) {
             if (r.id == rehId) {
@@ -33,7 +35,7 @@ class RehearsalRepository(val connect: Connection?)
         PostgresAccess(connect).deleteReh(rehId)
     }
     fun delByAcc(accId: Int) {
-        println("deleting rehearsals by acc...")
+        //println("deleting rehearsals by acc...")
         for (ind in rehearsals.size - 1 downTo 0) {
             if (rehearsals[ind].musicianId == accId) {
                 rehearsals.removeAt(ind)
@@ -42,12 +44,15 @@ class RehearsalRepository(val connect: Connection?)
         PostgresAccess(connect).deleteRehsByAcc(accId)
     }
     fun getRehearsal(rehId: Int): Rehearsal {
-        println("selecting rehearsal...")
+        //println("selecting rehearsal...")
         return PostgresAccess(connect).selectReh(rehId)
     }
     fun getAllRehs(baseId: Int): MutableList<Rehearsal> {
-        println("selecting rehearsals by base...")
+        //println("selecting rehearsals by base...")
         return PostgresAccess(connect).selectAllRehs(baseId)
+    }
+    fun getRehsByAcc(accId: Int): MutableList<Rehearsal> {
+        return PostgresAccess(connect).selectRehsByAcc(accId)
     }
 }
 
@@ -69,5 +74,8 @@ class RehActs(val connect: Connection?)
     }
     fun allRehs(baseId: Int): MutableList<Rehearsal> {
         return rep.getAllRehs(baseId)
+    }
+    fun rehsByAcc(accId: Int): MutableList<Rehearsal> {
+        return rep.getRehsByAcc(accId)
     }
 }

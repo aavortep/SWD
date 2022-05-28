@@ -15,7 +15,12 @@ class AccRepository(val connect: Connection?)
 {
     private val accs = PostgresAccess(connect).selectAllAccs()
 
+    fun selAcc(mail: String, password: String): Account {
+        return PostgresAccess(connect).selectAcc(mail, password)
+    }
     fun saveAcc(acc: Account) {
+        if (acc.id == -1)
+            acc.id = accs.size + 1
         var exists: Boolean = false
         var ind = 0
         for (a in accs) {
@@ -26,25 +31,25 @@ class AccRepository(val connect: Connection?)
             ++ind
         }
         if (exists) {
-            println("updating account...")
+            //println("updating account...")
             accs[ind] = acc
             PostgresAccess(connect).update(acc)
         }
         else {
-            println("inserting account...")
+            //println("inserting account...")
             accs.add(acc)
-            for (a in accs) {
+            /*for (a in accs) {
                 println(a.id)
                 println(a.fio)
                 println(a.phone)
                 println(a.mail)
                 println(a.password)
-            }
+            }*/
             PostgresAccess(connect).insert(acc)
         }
     }
     fun deleteAcc(accId: Int) {
-        println("deleting account...")
+        //println("deleting account...")
         var ind = 0
         for (a in accs) {
             if (a.id == accId) {
@@ -61,8 +66,12 @@ open class AccActs(private final val connect: Connection?)
 {
     private val rep = AccRepository(connect)
 
-    fun save(acc: Account) {
+    fun findAcc(mail: String, password: String): Account {
+        return rep.selAcc(mail, password)
+    }
+    fun save(acc: Account): Int {
         rep.saveAcc(acc)
+        return acc.id
     }
     fun delete(accId: Int) {
         RehActs(connect).delByAcc(accId)

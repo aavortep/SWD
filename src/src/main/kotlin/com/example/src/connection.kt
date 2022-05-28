@@ -1,4 +1,6 @@
 package com.example.src
+import java.io.File
+import java.io.InputStream
 import java.sql.*
 
 
@@ -30,19 +32,29 @@ interface DBAccess {
 }
 
 class PostgresAccess(var connection: Connection? = null) : DBAccess {
-    private val user = "postgres"
-    private val pass = "LinkinPark20"
-    private var url = "jdbc:postgresql://localhost:5432/HearBase"
+    private lateinit var user: String
+    private lateinit var pass: String
+    private lateinit var url: String
+    private lateinit var className: String
 
     private var prepStat: PreparedStatement? = null
 
     override fun connect(): Connection? {
+        val inputStream: InputStream = File("config.txt").inputStream()
+        val lineList = mutableListOf<String>()
+        inputStream.bufferedReader().forEachLine { lineList.add(it) }
+        user = lineList[0]
+        pass = lineList[1]
+        url = lineList[2]
+        className = lineList[3]
+
         try {
-            Class.forName("org.postgresql.Driver")
+            Class.forName(className)
             connection = DriverManager.getConnection(url, user, pass)
-            println("Successful connection")
+            File("log.txt").appendText("Successful connection\n")
             return connection
         } catch (e: Exception) {
+            File("log.txt").appendText("Error during connection\n")
             connection = null
             print(e.message)
             e.printStackTrace()
@@ -60,7 +72,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setString(5, acc.password)
         prepStat?.executeUpdate()
 
-        println("Account inserted successfully")
+        //println("Account inserted successfully")
     }
     override fun insert(base: RehearsalBase) {
         prepStat = connection?.prepareStatement("INSERT INTO reh_base " +
@@ -73,7 +85,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setString(6, base.mail)
         prepStat?.executeUpdate()
 
-        println("Base inserted successfully")
+        //println("Base inserted successfully")
     }
     override fun insert(room: Room) {
         prepStat = connection?.prepareStatement("INSERT INTO room " +
@@ -86,7 +98,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setInt(6, room.cost)
         prepStat?.executeUpdate()
 
-        println("Room inserted successfully")
+        //println("Room inserted successfully")
     }
     override fun insert(reh: Rehearsal) {
         prepStat = connection?.prepareStatement("INSERT INTO rehearsal " +
@@ -97,7 +109,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setTime(4, reh.time)
         prepStat?.executeUpdate()
 
-        println("Rehearsal inserted successfully")
+        //println("Rehearsal inserted successfully")
     }
 
     override fun update(acc: Account) {
@@ -111,7 +123,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setString(4, acc.password)
         prepStat?.executeUpdate()
 
-        println("Account updated successfully")
+        //println("Account updated successfully")
     }
     override fun update(base: RehearsalBase) {
         prepStat = connection?.prepareStatement("UPDATE reh_base " +
@@ -124,7 +136,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setString(4, base.mail)
         prepStat?.executeUpdate()
 
-        println("Base updated successfully")
+        //println("Base updated successfully")
     }
     override fun update(room: Room) {
         prepStat = connection?.prepareStatement("UPDATE room " +
@@ -137,7 +149,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setInt(4, room.cost)
         prepStat?.executeUpdate()
 
-        println("Room updated successfully")
+        //println("Room updated successfully")
     }
 
     override fun deleteAcc(accId: Int) {
@@ -145,42 +157,42 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setInt(1, accId)
         prepStat?.executeUpdate()
 
-        println("Account deleted successfully")
+        //println("Account deleted successfully")
     }
     override fun deleteBase(baseId: Int) {
         prepStat = connection?.prepareStatement("DELETE FROM reh_base WHERE id = ?")
         prepStat?.setInt(1, baseId)
         prepStat?.executeUpdate()
 
-        println("Base deleted successfully")
+       // println("Base deleted successfully")
     }
     override fun deleteBasesByAcc(accId: Int) {
         prepStat = connection?.prepareStatement("DELETE FROM reh_base WHERE ownerid = ?")
         prepStat?.setInt(1, accId)
         prepStat?.executeUpdate()
 
-        println("Bases of acc $accId deleted successfully")
+       // println("Bases of acc $accId deleted successfully")
     }
     override fun deleteReh(rehId: Int) {
         prepStat = connection?.prepareStatement("DELETE FROM rehearsal WHERE id = ?")
         prepStat?.setInt(1, rehId)
         prepStat?.executeUpdate()
 
-        println("Rehearsal deleted successfully")
+       // println("Rehearsal deleted successfully")
     }
     override fun deleteRehsByAcc(accId: Int) {
         prepStat = connection?.prepareStatement("DELETE FROM rehearsal WHERE musicianid = ?")
         prepStat?.setInt(1, accId)
         prepStat?.executeUpdate()
 
-        println("Rehearsals of acc $accId deleted successfully")
+       // println("Rehearsals of acc $accId deleted successfully")
     }
     override fun deleteRoom(roomId: Int) {
         prepStat = connection?.prepareStatement("DELETE FROM room WHERE id = ?")
         prepStat?.setInt(1, roomId)
         prepStat?.executeUpdate()
 
-        println("Room deleted successfully")
+       // println("Room deleted successfully")
     }
     override fun deleteRoomsByAcc(accId: Int) {
         prepStat = connection?.prepareStatement("DELETE FROM room WHERE baseid IN " +
@@ -188,14 +200,14 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.setInt(1, accId)
         prepStat?.executeUpdate()
 
-        println("Rooms of account $accId deleted successfully")
+       // println("Rooms of account $accId deleted successfully")
     }
     override fun deleteRoomsByBase(baseId: Int) {
         prepStat = connection?.prepareStatement("DELETE FROM room WHERE baseid = ?")
         prepStat?.setInt(1, baseId)
         prepStat?.executeUpdate()
 
-        println("Rooms of base $baseId deleted successfully")
+       // println("Rooms of base $baseId deleted successfully")
     }
 
     override fun selectBase(baseId: Int): RehearsalBase {
@@ -211,20 +223,20 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
             base.phone = res.getString("phone")
             base.mail = res.getString("mail")
 
-            println("Selected base:")
+            /*println("Selected base:")
             println("ID: " + base.id + "\n" +
                     "ownerID: " + base.ownerId + "\n" +
                     "name: " + base.name + "\n" +
                     "address: " + base.address + "\n" +
                     "phone: " + base.phone + "\n" +
-                    "mail: " + base.mail)
+                    "mail: " + base.mail)*/
         }
 
         return base
     }
     override fun selectAllBases(): MutableList<RehearsalBase> {
         val bases = mutableListOf<RehearsalBase>()
-        prepStat = connection?.prepareStatement("SELECT * FROM reh_base")
+        prepStat = connection?.prepareStatement("SELECT * FROM reh_base ORDER BY id")
         println("All bases:")
         val res = prepStat?.executeQuery() ?: return bases
         while (res.next()) {
@@ -237,18 +249,36 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
             base.mail = res.getString("mail")
             bases.add(base)
 
-            println("ID: " + base.id + "\n" +
+            /*println("ID: " + base.id + "\n" +
                     "ownerID: " + base.ownerId + "\n" +
                     "name: " + base.name + "\n" +
                     "address: " + base.address + "\n" +
                     "phone: " + base.phone + "\n" +
-                    "mail: " + base.mail)
+                    "mail: " + base.mail)*/
         }
         return bases
     }
     fun selectBases(): MutableList<RehearsalBase> {
         val bases = mutableListOf<RehearsalBase>()
-        prepStat = connection?.prepareStatement("SELECT * FROM reh_base")
+        prepStat = connection?.prepareStatement("SELECT * FROM reh_base ORDER BY id")
+        val res = prepStat?.executeQuery() ?: return bases
+        while (res.next()) {
+            val base = RehearsalBase()
+            base.id = res.getInt("id")
+            base.ownerId = res.getInt("ownerid")
+            base.name = res.getString("name")
+            base.address = res.getString("address")
+            base.phone = res.getString("phone")
+            base.mail = res.getString("mail")
+            bases.add(base)
+        }
+        return bases
+    }
+    fun selectBasesByAcc(accId: Int): MutableList<RehearsalBase> {
+        val bases = mutableListOf<RehearsalBase>()
+        prepStat = connection?.prepareStatement("SELECT * FROM reh_base " +
+                                                    "WHERE ownerid = ? ORDER BY id")
+        prepStat?.setInt(1, accId)
         val res = prepStat?.executeQuery() ?: return bases
         while (res.next()) {
             val base = RehearsalBase()
@@ -273,19 +303,22 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
             reh.roomId = res.getInt("roomid")
             reh.time = res.getTime("rehtime")
 
-            println("Selected rehearsal:")
+            /*println("Selected rehearsal:")
             println("ID: " + reh.id + "\n" +
                     "musicianID: " + reh.musicianId + "\n" +
                     "roomID: " + reh.roomId + "\n" +
-                    "time: " + reh.time)
+                    "time: " + reh.time)*/
         }
 
         return reh
     }
     override fun selectAllRehs(baseId: Int): MutableList<Rehearsal> {
         val rehs = mutableListOf<Rehearsal>()
-        prepStat = connection?.prepareStatement("SELECT * FROM rehearsal WHERE roomid IN " +
-                                                    "(SELECT id FROM room WHERE baseid = ?)")
+        prepStat = connection?.prepareStatement("SELECT * FROM rehearsal " +
+                                                    "WHERE roomid IN " +
+                                                    "(SELECT id FROM room " +
+                                                    "WHERE baseid = ?) " +
+                                                    "ORDER BY id")
         prepStat?.setInt(1, baseId)
         println("Selected rehearsals:")
         val res = prepStat?.executeQuery() ?: return rehs
@@ -297,16 +330,32 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
             reh.time = res.getTime("rehtime")
             rehs.add(reh)
 
-            println("ID: " + reh.id + "\n" +
+            /*println("ID: " + reh.id + "\n" +
                     "musicianID: " + reh.musicianId + "\n" +
                     "roomID: " + reh.roomId + "\n" +
-                    "time: " + reh.time)
+                    "time: " + reh.time)*/
         }
         return rehs
     }
     fun selectAllRehs(): MutableList<Rehearsal> {
         val rehs = mutableListOf<Rehearsal>()
-        prepStat = connection?.prepareStatement("SELECT * FROM rehearsal")
+        prepStat = connection?.prepareStatement("SELECT * FROM rehearsal ORDER BY id")
+        val res = prepStat?.executeQuery() ?: return rehs
+        while (res.next()) {
+            val reh = Rehearsal()
+            reh.id = res.getInt("id")
+            reh.musicianId = res.getInt("musicianid")
+            reh.roomId = res.getInt("roomid")
+            reh.time = res.getTime("rehtime")
+            rehs.add(reh)
+        }
+        return rehs
+    }
+    fun selectRehsByAcc(accId: Int): MutableList<Rehearsal> {
+        val rehs = mutableListOf<Rehearsal>()
+        prepStat = connection?.prepareStatement("SELECT * FROM rehearsal " +
+                "WHERE musicianid = ? ORDER BY id")
+        prepStat?.setInt(1, accId)
         val res = prepStat?.executeQuery() ?: return rehs
         while (res.next()) {
             val reh = Rehearsal()
@@ -320,7 +369,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
     }
     fun selectAllAccs(): MutableList<Account> {
         val accs = mutableListOf<Account>()
-        prepStat = connection?.prepareStatement("SELECT * FROM account")
+        prepStat = connection?.prepareStatement("SELECT * FROM account ORDER BY id")
         val res = prepStat?.executeQuery() ?: return accs
         while (res.next()) {
             val acc = Account()
@@ -333,9 +382,25 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         }
         return accs
     }
+    fun selectAcc(mail: String, password: String): Account {
+        val acc = Account()
+        prepStat = connection?.prepareStatement("SELECT * FROM account WHERE mail = ? " +
+                "AND password = ?")
+        prepStat?.setString(1, mail)
+        prepStat?.setString(2, password)
+        val res = prepStat?.executeQuery() ?: return acc
+        while (res.next()) {
+            acc.id = res.getInt("id")
+            acc.fio = res.getString("fio")
+            acc.phone = res.getString("phone")
+            acc.mail = res.getString("mail")
+            acc.password = res.getString("password")
+        }
+        return acc
+    }
     fun selectAllRooms(): MutableList<Room> {
         val rooms = mutableListOf<Room>()
-        prepStat = connection?.prepareStatement("SELECT * FROM room")
+        prepStat = connection?.prepareStatement("SELECT * FROM room ORDER BY id")
         val res = prepStat?.executeQuery() ?: return rooms
         while (res.next()) {
             val room = Room()
