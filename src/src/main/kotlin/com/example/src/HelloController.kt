@@ -1,9 +1,12 @@
 package com.example.src
 
+import com.dlsc.formsfx.model.structure.IntegerField
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.control.PasswordField
+import javafx.scene.control.ScrollPane
 import javafx.scene.control.TextField
+import java.sql.Time
 
 class WelcomeController {
     @FXML
@@ -15,11 +18,11 @@ class WelcomeController {
     }
     @FXML
     private fun onSignInButtonClick() {
-        SignIn().sign_in()
+        HelloApplication().sign_in()
     }
     @FXML
     private fun onSignUpButtonClick() {
-        SignIn().sign_up()
+        HelloApplication().sign_up()
     }
 }
 
@@ -45,7 +48,7 @@ class SignInController
             error.text = "Invalid email or password. Try again"
             return
         }
-        //main page
+        HelloApplication().main_page(acc)
     }
 }
 
@@ -73,12 +76,114 @@ class SignUpController
             error.text = "Please, fill all the gaps"
             return
         }
-        Actions().saveAcc(acc)
-        //main page
+        acc.id = Actions().saveAcc(acc)
+        HelloApplication().main_page(acc)
     }
 }
 
 class MainPageController
 {
+    @FXML
+    private lateinit var roomIdField: TextField
+    @FXML
+    private lateinit var hourField: TextField
+    @FXML
+    private lateinit var scrollPane: ScrollPane
+    @FXML
+    private lateinit var error: Label
+    val reh = Rehearsal()
 
+    fun showRooms(content: Label) {
+        scrollPane.content = content
+        scrollPane.prefViewportHeight = 150.0
+        scrollPane.prefViewportWidth = 200.0
+    }
+    @FXML
+    private fun onBookButtonClick() {
+        val hour: Int
+        try {
+            reh.roomId = roomIdField.text.toInt()
+            hour = hourField.text.toInt()
+        }
+        catch (e: NumberFormatException) {
+            error.text = "Invalid input"
+            return
+        }
+        reh.time = Time(hour, 0, 0)
+        Actions().bookReh(reh)
+        error.text = "Rehearsal was booked!"
+    }
+    @FXML
+    private fun onShowButtonClick() {
+        HelloApplication().booked_rehs(reh.musicianId)
+    }
+    @FXML
+    private fun onRegBaseButtonClick() {
+        HelloApplication().owner_page(reh.musicianId)
+    }
+    @FXML
+    private fun onDelButtonClick() {
+        Actions().delAcc(reh.musicianId)
+        HelloApplication().sign_up()
+    }
+}
+
+class OwnerController
+{
+    @FXML
+    private lateinit var baseNameField: TextField
+    @FXML
+    private lateinit var addressField: TextField
+    @FXML
+    private lateinit var phoneField: TextField
+    @FXML
+    private lateinit var mailField: TextField
+    @FXML
+    private lateinit var nameField: TextField
+    @FXML
+    private lateinit var typeField: TextField
+    @FXML
+    private lateinit var areaField: TextField
+    @FXML
+    private lateinit var costField: TextField
+    @FXML
+    private lateinit var error: Label
+    val base = RehearsalBase()
+
+    @FXML
+    private fun onSubmitButtonClick() {
+        base.name = baseNameField.text
+        base.address = addressField.text
+        base.phone = phoneField.text
+        base.mail = mailField.text
+        if (base.name == "" || base.address == "" || base.mail == "" || base.phone == "") {
+            error.text = "Please, fill all the gaps"
+            return
+        }
+        val room = Room()
+        room.name = nameField.text
+        room.type = typeField.text
+        try {
+            room.area = areaField.text.toInt()
+            room.cost = costField.text.toInt()
+        }
+        catch (e: NumberFormatException) {
+            error.text = "Invalid room area or cost"
+            return
+        }
+        Actions().saveBase(base, room)
+        error.text = "Rehearsal base saved!"
+    }
+}
+
+class BookedRehsController
+{
+    @FXML
+    private lateinit var scrollPane: ScrollPane
+
+    fun showRehs(content: Label) {
+        scrollPane.content = content
+        scrollPane.prefViewportHeight = 150.0
+        scrollPane.prefViewportWidth = 200.0
+    }
 }

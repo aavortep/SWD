@@ -40,7 +40,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         try {
             Class.forName("org.postgresql.Driver")
             connection = DriverManager.getConnection(url, user, pass)
-            println("Successful connection")
+            //println("Successful connection")
             return connection
         } catch (e: Exception) {
             connection = null

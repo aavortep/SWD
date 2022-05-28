@@ -2,40 +2,14 @@ package com.example.src
 
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
 import javafx.scene.Scene
+import javafx.scene.control.Label
 import javafx.stage.Stage
 import java.sql.Connection
 import java.sql.Time
 
-class HelloApplication : Application() {
-    override fun start(stage: Stage) {
-        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("hello-view.fxml"))
-        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
-        stage.title = "Welcome"
-        stage.scene = scene
-        stage.show()
-    }
-}
 
-class SignIn
-{
-    fun sign_in() {
-        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("sign-in.fxml"))
-        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
-        val stage = Stage()
-        stage.title = "Sign in"
-        stage.scene = scene
-        stage.show()
-    }
-    fun sign_up() {
-        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("sign-up.fxml"))
-        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
-        val stage = Stage()
-        stage.title = "Sign up"
-        stage.scene = scene
-        stage.show()
-    }
-}
 
 fun test_business(connect: Connection?) {
     TestBusiness(connect).createAcc()
@@ -111,6 +85,87 @@ fun test_access(connect: Connection?) {
     TestAccess(connect).delAcc(2)
 }
 
+class HelloApplication : Application() {
+    override fun start(stage: Stage) {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("hello-view.fxml"))
+        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
+        stage.title = "Welcome"
+        stage.scene = scene
+        stage.show()
+    }
+    fun sign_in() {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("sign-in.fxml"))
+        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
+        val stage = Stage()
+        stage.title = "Sign in"
+        stage.scene = scene
+        stage.show()
+    }
+    fun sign_up() {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("sign-up.fxml"))
+        val scene = Scene(fxmlLoader.load(), 1000.0, 600.0)
+        val stage = Stage()
+        stage.title = "Sign up"
+        stage.scene = scene
+        stage.show()
+    }
+    fun main_page(acc: Account) {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("main-page.fxml"))
+        val rooms = Actions().allRooms()
+        var scrollText = ""
+        for (room in rooms) {
+            scrollText += room.id.toString()
+            scrollText += ". "
+            scrollText += room.name
+            scrollText += " ("
+            scrollText += room.cost.toString()
+            scrollText += " rub)\n"
+        }
+        val root = fxmlLoader.load<Parent>()
+        val controller = fxmlLoader.getController<MainPageController>()
+        controller.showRooms(Label(scrollText))
+        controller.reh.musicianId = acc.id
+        val scene = Scene(root, 1000.0, 600.0)
+        val stage = Stage()
+        stage.title = "Main page"
+        stage.scene = scene
+        stage.show()
+    }
+    fun owner_page(ownerId: Int) {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("owner-page.fxml"))
+        val root = fxmlLoader.load<Parent>()
+        val controller = fxmlLoader.getController<OwnerController>()
+        controller.base.ownerId = ownerId
+        val scene = Scene(root, 1000.0, 600.0)
+        val stage = Stage()
+        stage.title = "Owner page"
+        stage.scene = scene
+        stage.show()
+    }
+    fun booked_rehs(accId: Int) {
+        val fxmlLoader = FXMLLoader(HelloApplication::class.java.getResource("booked-rehs.fxml"))
+        val root = fxmlLoader.load<Parent>()
+        val controller = fxmlLoader.getController<BookedRehsController>()
+        val rehs = Actions().bookedRehs(accId)
+        val rooms = Actions().allRooms()
+        var scrollText = ""
+        for (reh in rehs) {
+            scrollText += rooms[reh.roomId - 1].name
+            scrollText += " - "
+            scrollText += reh.time
+            scrollText += " ("
+            scrollText += rooms[reh.roomId - 1].cost
+            scrollText += " rub)\n"
+        }
+        controller.showRehs(Label(scrollText))
+        val scene = Scene(root, 1000.0, 600.0)
+        val stage = Stage()
+        stage.title = "Booked rehearsals"
+        stage.scene = scene
+        stage.show()
+    }
+}
+
 class Actions
 {
     private val connect = PostgresAccess(null).connect()
@@ -118,8 +173,23 @@ class Actions
     fun findAcc(mail: String, password: String): Account {
         return AccActs(connect).findAcc(mail, password)
     }
-    fun saveAcc(acc: Account) {
-        AccActs(connect).save(acc)
+    fun saveAcc(acc: Account): Int {
+        return AccActs(connect).save(acc)
+    }
+    fun allRooms(): MutableList<Room> {
+        return PostgresAccess(connect).selectAllRooms()
+    }
+    fun bookReh(reh: Rehearsal) {
+        MusicianActs(connect).bookReh(reh)
+    }
+    fun delAcc(accId: Int) {
+        AccActs(connect).delete(accId)
+    }
+    fun saveBase(base: RehearsalBase, room: Room) {
+        OwnerActs(connect).saveBase(base, room)
+    }
+    fun bookedRehs(accId: Int): MutableList<Rehearsal> {
+        return RehActs(connect).rehsByAcc(accId)
     }
 }
 
