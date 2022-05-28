@@ -47,7 +47,7 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         pass = lineList[1]
         url = lineList[2]
         className = lineList[3]
-        
+
         try {
             Class.forName(className)
             connection = DriverManager.getConnection(url, user, pass)
