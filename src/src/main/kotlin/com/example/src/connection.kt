@@ -1,4 +1,6 @@
 package com.example.src
+import java.io.File
+import java.io.InputStream
 import java.sql.*
 
 
@@ -30,19 +32,29 @@ interface DBAccess {
 }
 
 class PostgresAccess(var connection: Connection? = null) : DBAccess {
-    private val user = "postgres"
-    private val pass = "LinkinPark20"
-    private var url = "jdbc:postgresql://localhost:5432/HearBase"
+    private lateinit var user: String
+    private lateinit var pass: String
+    private lateinit var url: String
+    private lateinit var className: String
 
     private var prepStat: PreparedStatement? = null
 
     override fun connect(): Connection? {
+        val inputStream: InputStream = File("config.txt").inputStream()
+        val lineList = mutableListOf<String>()
+        inputStream.bufferedReader().forEachLine { lineList.add(it) }
+        user = lineList[0]
+        pass = lineList[1]
+        url = lineList[2]
+        className = lineList[3]
+        
         try {
-            Class.forName("org.postgresql.Driver")
+            Class.forName(className)
             connection = DriverManager.getConnection(url, user, pass)
-            //println("Successful connection")
+            File("log.txt").appendText("Successful connection\n")
             return connection
         } catch (e: Exception) {
+            File("log.txt").appendText("Error during connection\n")
             connection = null
             print(e.message)
             e.printStackTrace()
