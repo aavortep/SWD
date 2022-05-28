@@ -59,3 +59,7 @@
 ## Сущности БД
 
 ![er db](./diagrams/ER_DB.png)
+
+## Диаграмма GUI
+
+![uml gui](./diagrams/UML_GUI.png)
