@@ -6,6 +6,7 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.Label
 import javafx.stage.Stage
+import java.io.File
 import java.sql.Connection
 import java.sql.Time
 
@@ -171,24 +172,36 @@ class Actions
     private val connect = PostgresAccess(null).connect()
 
     fun findAcc(mail: String, password: String): Account {
+        File("log.txt").appendText("Authorisation attempt " +
+                "with email: $mail\n")
         return AccActs(connect).findAcc(mail, password)
     }
     fun saveAcc(acc: Account): Int {
+        File("log.txt").appendText("Account registration: " +
+                "${acc.mail} ${acc.fio}\n")
         return AccActs(connect).save(acc)
     }
     fun allRooms(): MutableList<Room> {
+        File("log.txt").appendText("All rooms request\n")
         return PostgresAccess(connect).selectAllRooms()
     }
     fun bookReh(reh: Rehearsal) {
         MusicianActs(connect).bookReh(reh)
+        File("log.txt").appendText("Rehearsal booking: " +
+                "musician ID - ${reh.musicianId}, " +
+                "room ID - ${reh.roomId}, time - ${reh.time}\n")
     }
     fun delAcc(accId: Int) {
         AccActs(connect).delete(accId)
+        File("log.txt").appendText("User $accId deleted his account\n")
     }
     fun saveBase(base: RehearsalBase, room: Room) {
         OwnerActs(connect).saveBase(base, room)
+        File("log.txt").appendText("Base registration or changing: " +
+                "${base.name} (owner ID: ${base.ownerId})\n")
     }
     fun bookedRehs(accId: Int): MutableList<Rehearsal> {
+        File("log.txt").appendText("Booked rehearsals request\n")
         return RehActs(connect).rehsByAcc(accId)
     }
 }
