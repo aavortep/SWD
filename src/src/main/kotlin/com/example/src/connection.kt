@@ -100,6 +100,16 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
 
         //println("Room inserted successfully")
     }
+    fun insert(equip: Equipment) {
+        prepStat = connection?.prepareStatement("INSERT INTO equipment " +
+                "VALUES (?, ?, ?, ?, ?)")
+        prepStat?.setInt(1, equip.id)
+        prepStat?.setInt(2, equip.roomId)
+        prepStat?.setString(3, equip.type)
+        prepStat?.setString(4, equip.brand)
+        prepStat?.setInt(5, equip.amount)
+        prepStat?.executeUpdate()
+    }
     override fun insert(reh: Rehearsal) {
         prepStat = connection?.prepareStatement("INSERT INTO rehearsal " +
                 "VALUES (?, ?, ?, ?)")
@@ -150,6 +160,16 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.executeUpdate()
 
         //println("Room updated successfully")
+    }
+    fun update(equip: Equipment) {
+        prepStat = connection?.prepareStatement("UPDATE equipment " +
+                "SET type = ?, brand = ?, amount = ? " +
+                "WHERE id = ?")
+        prepStat?.setInt(4, equip.id)
+        prepStat?.setString(1, equip.type)
+        prepStat?.setString(2, equip.brand)
+        prepStat?.setInt(3, equip.amount)
+        prepStat?.executeUpdate()
     }
 
     override fun deleteAcc(accId: Int) {
@@ -208,6 +228,25 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
         prepStat?.executeUpdate()
 
        // println("Rooms of base $baseId deleted successfully")
+    }
+    fun deleteEquip(equipId: Int) {
+        prepStat = connection?.prepareStatement("DELETE FROM equipment WHERE id = ?")
+        prepStat?.setInt(1, equipId)
+        prepStat?.executeUpdate()
+    }
+    fun deleteEquipByRoom(roomId: Int) {
+        prepStat = connection?.prepareStatement("DELETE FROM equipment " +
+                                                    "WHERE roomid = ?")
+        prepStat?.setInt(1, roomId)
+        prepStat?.executeUpdate()
+    }
+    fun deleteEquipByAcc(accId: Int) {
+        prepStat = connection?.prepareStatement("DELETE FROM equipment " +
+                "WHERE roomid IN " +
+                "(SELECT room.id FROM room WHERE room.baseid IN " +
+                "(SELECT reh_base.id FROM reh_base WHERE reh_base.ownerid = ?))")
+        prepStat?.setInt(1, accId)
+        prepStat?.executeUpdate()
     }
 
     override fun selectBase(baseId: Int): RehearsalBase {
@@ -413,5 +452,20 @@ class PostgresAccess(var connection: Connection? = null) : DBAccess {
             rooms.add(room)
         }
         return rooms
+    }
+    fun selectAllEquip(): MutableList<Equipment> {
+        val equip = mutableListOf<Equipment>()
+        prepStat = connection?.prepareStatement("SELECT * FROM equipment ORDER BY id")
+        val res = prepStat?.executeQuery() ?: return equip
+        while (res.next()) {
+            val eq = Equipment()
+            eq.id = res.getInt("id")
+            eq.roomId = res.getInt("roomid")
+            eq.type = res.getString("type")
+            eq.brand = res.getString("brand")
+            eq.amount = res.getInt("amount")
+            equip.add(eq)
+        }
+        return equip
     }
 }

@@ -147,6 +147,12 @@ class OwnerController
     @FXML
     private lateinit var costField: TextField
     @FXML
+    private lateinit var equipTypeField: TextField
+    @FXML
+    private lateinit var brandField: TextField
+    @FXML
+    private lateinit var amountField: TextField
+    @FXML
     private lateinit var error: Label
     val base = RehearsalBase()
 
@@ -160,6 +166,7 @@ class OwnerController
             error.text = "Please, fill all the gaps"
             return
         }
+
         val room = Room()
         room.name = nameField.text
         room.type = typeField.text
@@ -171,7 +178,19 @@ class OwnerController
             error.text = "Invalid room area or cost"
             return
         }
-        Actions().saveBase(base, room)
+
+        val equip = Equipment()
+        equip.type = equipTypeField.text
+        equip.brand = brandField.text
+        try {
+            equip.amount = amountField.text.toInt()
+        }
+        catch (e: java.lang.NumberFormatException) {
+            error.text = "Invalid amount of equipment"
+            return
+        }
+
+        Actions().saveBase(base, room, equip)
         error.text = "Rehearsal base saved!"
     }
 }

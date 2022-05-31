@@ -13,6 +13,7 @@
 
     <Label text="Base info:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
     <Label text="Room info:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+    <Label text="Equipment info:" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
 
     <Label text="name:"
            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
@@ -53,6 +54,21 @@
            GridPane.columnIndex="2" GridPane.rowIndex="4"/>
     <TextField fx:id="costField"
                GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+    <Label text="Type:"
+           GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+    <TextField fx:id="equipTypeField"
+               GridPane.columnIndex="5" GridPane.rowIndex="1"/>
+
+    <Label text="Brand:"
+           GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+    <TextField fx:id="brandField"
+               GridPane.columnIndex="5" GridPane.rowIndex="2"/>
+
+    <Label text="Amount:"
+           GridPane.columnIndex="4" GridPane.rowIndex="3"/>
+    <TextField fx:id="amountField"
+               GridPane.columnIndex="5" GridPane.rowIndex="3"/>
 
     <Label fx:id="error" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
 

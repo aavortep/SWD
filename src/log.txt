@@ -1,0 +1,37 @@
+Successful connection
+Account registration: abcd@mail.ru Petrova A A
+Successful connection
+All rooms request
+Successful connection
+Base registration or changing: HighGain (owner ID: 1)
+Successful connection
+Base registration or changing: HighGain (owner ID: 1)
+Successful connection
+Authorisation attempt with email: abcd@mail.ru
+Successful connection
+All rooms request
+Successful connection
+Authorisation attempt with email: abcd@mail.ru
+Successful connection
+All rooms request
+Successful connection
+Successful connection
+Authorisation attempt with email: abcd@mail.ru
+Successful connection
+All rooms request
+Successful connection
+User 1 deleted his account
+Successful connection
+Account registration: abcd@mail.ru Petrova A A
+Successful connection
+All rooms request
+Successful connection
+Base registration or changing: HighGain (owner ID: 1)
+Successful connection
+Base registration or changing: HighGain (owner ID: 1)
+Successful connection
+Authorisation attempt with email: abcd@mail.ru
+Successful connection
+All rooms request
+Successful connection
+User 1 deleted his account
