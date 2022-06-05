@@ -3,7 +3,7 @@ package com.example.src
 import java.sql.Connection
 import java.sql.Time
 
-class CheckData()
+/*class CheckData()
 {
     private fun is_empty(str: String?): Boolean {
         return (str == null || str == "\n" || str == "")
@@ -318,4 +318,4 @@ class TUI(val connect: Connection?)
 
         return option
     }
-}
+}*/

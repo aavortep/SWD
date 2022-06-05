@@ -95,8 +95,8 @@ class MusicianActs(val connect: Connection?) : AccActs(connect)
 
 class OwnerActs(val connect: Connection?) : AccActs(connect)
 {
-    fun saveBase(base: RehearsalBase, room: Room) {
-        RehBaseActs(connect).save(base, room)
+    fun saveBase(base: RehearsalBase, room: Room, eq: Equipment) {
+        RehBaseActs(connect).save(base, room, eq)
     }
     fun delBase(baseId: Int) {
         RehBaseActs(connect).delete(baseId)

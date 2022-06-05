@@ -3,7 +3,7 @@ package com.example.src
 import java.sql.Connection
 import java.sql.Time
 
-class TestBusiness(val connect: Connection?)
+/*class TestBusiness(val connect: Connection?)
 {
     private var acc = Account()
     private var base = RehearsalBase()
@@ -103,4 +103,4 @@ class TestAccess(var connect: Connection?)
     fun delRoom(roomId: Int) {
         OwnerActs(connect).delRoom(roomId)
     }
-}
+}*/

@@ -11,8 +11,7 @@ import java.sql.Connection
 import java.sql.Time
 
 
-
-fun test_business(connect: Connection?) {
+/*fun test_business(connect: Connection?) {
     TestBusiness(connect).createAcc()
     TestBusiness(connect).showBases()
     TestBusiness(connect).getBase()
@@ -84,7 +83,7 @@ fun test_access(connect: Connection?) {
 
     TestAccess(connect).delAcc(1)
     TestAccess(connect).delAcc(2)
-}
+}*/
 
 class HelloApplication : Application() {
     override fun start(stage: Stage) {
@@ -195,8 +194,8 @@ class Actions
         AccActs(connect).delete(accId)
         File("log.txt").appendText("User $accId deleted his account\n")
     }
-    fun saveBase(base: RehearsalBase, room: Room) {
-        OwnerActs(connect).saveBase(base, room)
+    fun saveBase(base: RehearsalBase, room: Room, eq: Equipment) {
+        OwnerActs(connect).saveBase(base, room, eq)
         File("log.txt").appendText("Base registration or changing: " +
                 "${base.name} (owner ID: ${base.ownerId})\n")
     }

@@ -22,8 +22,9 @@ class RoomRepository(val connect: Connection?)
         var exists: Boolean = false
         var ind = 0
         for (r in rooms) {
-            if (r.id == room.id) {
+            if (r.id == room.id || r.baseId == room.baseId) {
                 exists = true
+                room.id = r.id  // если комната та же, но id был уже присвоен новый
                 break
             }
             ++ind
@@ -87,8 +88,13 @@ class RoomActs(val connect: Connection?)
 {
     private val rep = RoomRepository(connect)
 
-    fun save(room: Room) {
+    fun save(room: Room, eq: Equipment) {
         rep.saveRoom(room)
+        if (eq.type != null)
+        {
+            eq.roomId = room.id
+            EquipActs(connect).save(eq)
+        }
     }
     fun delete(roomId: Int) {
         rep.deleteRoom(roomId)
@@ -97,6 +103,7 @@ class RoomActs(val connect: Connection?)
         rep.delByBase(baseId)
     }
     fun delByAcc(accId: Int) {
+        EquipActs(connect).delByAcc(accId)
         rep.delByAcc(accId)
     }
 }

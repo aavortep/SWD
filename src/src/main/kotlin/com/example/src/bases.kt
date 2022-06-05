@@ -22,8 +22,9 @@ class RehBaseRepository(val connect: Connection?)
         var exists: Boolean = false
         var ind = 0
         for (b in bases) {
-            if (b.id == base.id) {
+            if (b.id == base.id || b.name == base.name) {
                 exists = true
+                base.id = b.id  // если имена одинаковые, но id уже был присвоен новый
                 break
             }
             ++ind
@@ -75,12 +76,12 @@ class RehBaseActs(val connect: Connection?)
 {
     private val rep = RehBaseRepository(connect)
 
-    fun save(base: RehearsalBase, room: Room) {
+    fun save(base: RehearsalBase, room: Room, eq: Equipment) {
         rep.saveBase(base)
         if (room.name != null)
         {
             room.baseId = base.id
-            RoomActs(connect).save(room)
+            RoomActs(connect).save(room, eq)
         }
     }
     fun delete(baseId: Int) {

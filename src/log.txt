@@ -1,0 +1,8 @@
+Successful connection
+Authorisation attempt with email: abcd@mail.ru
+Successful connection
+All rooms request
+Successful connection
+Account registration: abcd@mail.ru Petrova A A
+Successful connection
+All rooms request
